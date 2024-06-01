@@ -1,5 +1,6 @@
 import pygame
 
+#Archivo encargado de agrupar las imagenes para facilitar el manejo de estas mismas
 lobby = [
     pygame.image.load("imagenes/lobby/0.png"),
     pygame.image.load("imagenes/lobby/1.png"),
