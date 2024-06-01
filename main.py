@@ -10,11 +10,14 @@ screen = pygame.display.set_mode(size)
 def main():
     pygame.init()
     
-    fondo = Fondo()
-    fondo_rect = fondo.lobby.get_rect()
-    
     pj = Jugador()
     pj_rect = pj.jugador.get_rect()
+    
+    fondo = Fondo(pj)
+    fondo_rect = fondo.imagen.get_rect()
+    
+    pygame.font.init()
+    font = pygame.font.Font(None, 36)
         
     while 1:
         for event in pygame.event.get():
@@ -25,10 +28,14 @@ def main():
         pj.pegar()
 
         pj_rect.topleft = (pj.x, pj.y)
-        screen.blit(fondo.lobby, fondo_rect)
+        screen.blit(fondo.imagen, fondo_rect)
         screen.blit(pj.jugador, pj_rect)
         
+        coords_text = font.render(f"Coordenadas: ({pj.x}, {pj.y})", True, (255, 255, 255))
+        screen.blit(coords_text, (10, 10))
+        
         fondo.animar_fondo()
+        fondo.cambiar_fondo()
 
         pygame.display.update()
         pygame.time.delay(100)

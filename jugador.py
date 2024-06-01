@@ -12,6 +12,7 @@ class Jugador():
         self.y = 450
         self.atacando = False
         self.contador_ataque = 0
+        self.direccion = "d"
     
     def mover(self):
         teclas = pygame.key.get_pressed()
@@ -24,6 +25,7 @@ class Jugador():
             self.jugador = jugador_caminar[self.contador_j]
             self.jugador = pygame.transform.scale(self.jugador, (130, 130))
             self.x += 15
+            self.direccion = "d"
             
         elif teclas[K_LEFT]:
             if self.contador_j == 7:
@@ -34,10 +36,16 @@ class Jugador():
             self.jugador = pygame.transform.scale(self.jugador, (130, 130))
             self.jugador = pygame.transform.flip(self.jugador, True, False)
             self.x -= 15
+            self.direccion = "i"
         
         else:
-            self.jugador = jugador_caminar[0]
-            self.jugador = pygame.transform.scale(self.jugador, (130, 130))
+            if self.direccion == "d":
+                self.jugador = jugador_caminar[0]
+                self.jugador = pygame.transform.scale(self.jugador, (130, 130))
+            elif self.direccion == "i":
+                self.jugador = jugador_caminar[0]
+                self.jugador = pygame.transform.scale(self.jugador, (130, 130))
+                self.jugador = pygame.transform.flip(self.jugador, True, False)
     
     def pegar(self):
         teclas = pygame.key.get_pressed()
