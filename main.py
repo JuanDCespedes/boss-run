@@ -7,6 +7,35 @@ from jugador import *
 size = width, heigth = 1022, 588
 screen = pygame.display.set_mode(size)
 
+
+def mostrar_dialogo_tienda(screen, jugador):
+    transparent_grey = (200, 200, 200, 200)  
+    pygame.draw.rect(screen, transparent_grey, (0, 0, width, height), border_radius=20) 
+    font = pygame.font.SysFont("timesnewroman", 48)  
+    texto = [
+        f"Bienvenido a la tienda, ¿Qué deseas mejorar? (Monedas: {jugador.monedas})",
+        f"HP    {jugador.hp}/3",
+        f"ATK  {jugador.atk}/3",
+        f"VEL    {jugador.vel}/3"
+    ]
+    y_pos = 150
+    for line in texto:
+        text_surface = font.render(line, True, (0, 0, 0)) 
+        text_rect = text_surface.get_rect(center=(width // 2, y_pos))
+        screen.blit(text_surface, text_rect)
+        y_pos += 80
+    
+    pygame.display.update()  
+    pygame.time.delay(3000) 
+    esperando = True
+    while esperando:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    esperando = False
+
 #Funcion main
 def main():
     pygame.init()
@@ -37,8 +66,27 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-        
-        #Llamado de todas las funciones necesarias
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    if isinstance(fondo, Fondo) and fondo.num_fondo == 0 and 690 <= pj.x <= 780 and pj.y == 450:
+                        mostrar_dialogo_tienda(screen, pj)
+                        continue 
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  
+                    x, y = event.pos
+                    if 320 <= x <= 420 and 240 <= y <= 320:  
+                        if pj.monedas > 0 and pj.hp < 3:
+                            pj.monedas -= 1
+                            pj.hp += 1
+                    elif 320 <= x <= 420 and 320 <= y <= 400: 
+                        if pj.monedas > 0 and pj.atk < 3:
+                            pj.monedas -= 1
+                            pj.atk += 1
+                    elif 320 <= x <= 420 and 400 <= y <= 480: 
+                        if pj.monedas > 0 and pj.vel < 3:
+                            pj.monedas -= 1
+                            pj.vel += 1
+                
         pj.mover()
         pj.pegar()
         pj.saltar()

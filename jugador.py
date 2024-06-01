@@ -13,10 +13,6 @@ class Jugador():
         self.y = 450
         self.contador_ataque = 0
         self.contador_salto = 0
-        self.atacando = False
-        self.saltando = False
-        self.jugador = jugador_caminar[self.contador_j]
-        self.jugador = pygame.transform.scale(self.jugador, (200, 200))
     
     #Funcion encargada del recorrido horizontal del jugador
     def mover(self):
@@ -114,3 +110,25 @@ class Jugador():
             else:
                 self.saltando = False
                 self.contador_salto = 0
+
+    def recibir_dano(self, cantidad):
+        self.vida -= cantidad
+        if self.vida < 0:
+            self.vida = 0
+
+    def dibujar_vida(self, screen):
+        largo_barra = 200
+        ancho_barra = 20
+        borde_barra = 2
+
+        vida_actual = int((self.vida / 20) * largo_barra)
+        
+     
+        pygame.draw.rect(screen, (255, 0, 0), (10, 10, largo_barra, ancho_barra))
+        pygame.draw.rect(screen, (0, 255, 0), (10, 10, vida_actual, ancho_barra))
+        pygame.draw.rect(screen, (255, 255, 255), (10, 10, largo_barra, ancho_barra), borde_barra)
+        
+        
+        font = pygame.font.SysFont("ravie", 24)  
+        texto_vida = font.render(f"{self.vida}/20", True, (0, 0, 255))  
+        screen.blit(texto_vida, (10, 35))
