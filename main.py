@@ -8,25 +8,25 @@ size = width, height = 1022, 588
 screen = pygame.display.set_mode(size)
 
 #Funcion de la logica de la tienda
-def mostrar_dialogo_tienda(screen, jugador):
-    transparent_grey = (200, 200, 200, 200)  
-    pygame.draw.rect(screen, transparent_grey, (0, 0, width, height), border_radius=20) 
-    font = pygame.font.SysFont("timesnewroman", 48)  
-    texto = [
-        f"Bienvenido a la tienda, ¿Qué deseas mejorar? (Monedas: {jugador.monedas})",
-        f"HP    {jugador.hp}/3",
-        f"ATK  {jugador.atk}/3",
-        f"VEL    {jugador.vel}/3"
+def mostrar_dialogo_tienda(screen, pj):
+    pygame.draw.rect(screen, (200, 200, 200), (0, 0, width, height))  # Fondo gris claro
+    font = pygame.font.Font(None, 48)  # Fuente más grande
+
+    textos = [
+        ("Bienvenido a la tienda, ¿Qué deseas mejorar?", (width // 2, 100)),
+        (f"HP         {pj.mejoras['HP']}/3", (width // 2, 200)),
+        (f"ATK       {pj.mejoras['ATK']}/3", (width // 2, 300)),
+        (f"VEL       {pj.mejoras['VEL']}/3", (width // 2, 400)),
+        (f"Monedas: {pj.monedas}", (width // 2, 500))
     ]
-    y_pos = 150
-    for line in texto:
-        text_surface = font.render(line, True, (0, 0, 0)) 
-        text_rect = text_surface.get_rect(center=(width // 2, y_pos))
+
+    for texto, pos in textos:
+        text_surface = font.render(texto, True, (0, 0, 0))  # Texto negro
+        text_rect = text_surface.get_rect(center=pos)
         screen.blit(text_surface, text_rect)
-        y_pos += 80
-    
-    pygame.display.update()  
-    pygame.time.delay(3000) 
+
+    pygame.display.update()  # Actualizar la pantalla después de dibujar
+
     esperando = True
     while esperando:
         for event in pygame.event.get():
@@ -35,6 +35,34 @@ def mostrar_dialogo_tienda(screen, jugador):
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     esperando = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Clic izquierdo
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    if 350 <= mouse_x <= 650:
+                        if 175 <= mouse_y <= 225:
+                            pj.mejorar("HP")
+                        elif 275 <= mouse_y <= 325:
+                            pj.mejorar("ATK")
+                        elif 375 <= mouse_y <= 425:
+                            pj.mejorar("VEL")
+
+        # Volver a dibujar para actualizar las estadísticas
+        pygame.draw.rect(screen, (200, 200, 200), (0, 0, width, height))
+        for texto, pos in textos:
+            if "HP" in texto:
+                texto = f"HP         {pj.mejoras['HP']}/3"
+            elif "ATK" in texto:
+                texto = f"ATK       {pj.mejoras['ATK']}/3"
+            elif "VEL" in texto:
+                texto = f"VEL       {pj.mejoras['VEL']}/3"
+            elif "Monedas" in texto:
+                texto = f"Monedas: {pj.monedas}"
+            
+            text_surface = font.render(texto, True, (0, 0, 0))
+            text_rect = text_surface.get_rect(center=pos)
+            screen.blit(text_surface, text_rect)
+
+        pygame.display.update()
 
 #Funcion principal del juego
 def main():
@@ -65,9 +93,12 @@ def main():
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
+                    print(f"Posición del jugador: ({pj.x}, {pj.y})")
+                    print(f"Fondo: {fondo.num_fondo}")
                     if isinstance(fondo, Fondo) and fondo.num_fondo == 0 and 690 <= pj.x <= 780 and pj.y == 450:
+                        print("¡Condición cumplida! Mostrando diálogo...")
                         mostrar_dialogo_tienda(screen, pj)
-                        continue 
+                        continue
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  
                     x, y = event.pos
