@@ -45,3 +45,9 @@ jugador_caminar = [
     pygame.image.load("imagenes/caminar/6.png"),
     pygame.image.load("imagenes/caminar/7.png")
 ]
+
+jugador_pegar = [
+    pygame.image.load("imagenes/pegar/0.png"),
+    pygame.image.load("imagenes/pegar/1.png"),
+    pygame.image.load("imagenes/pegar/2.png")
+]

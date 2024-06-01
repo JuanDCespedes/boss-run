@@ -1,6 +1,5 @@
 import pygame
 import sys
-from imagenes1 import lobby
 from fondo import *
 from jugador import *
 
@@ -16,7 +15,6 @@ def main():
     
     pj = Jugador()
     pj_rect = pj.jugador.get_rect()
-    pj_rect.topleft = (0, 380)
         
     while 1:
         for event in pygame.event.get():
@@ -24,7 +22,9 @@ def main():
                 sys.exit()
                 
         pj.mover()
-        
+        pj.pegar()
+
+        pj_rect.topleft = (pj.x, pj.y)
         screen.blit(fondo.lobby, fondo_rect)
         screen.blit(pj.jugador, pj_rect)
         
