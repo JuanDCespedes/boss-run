@@ -1,3 +1,4 @@
+#Archivo dedicado a agrupar las imagenes para un uso mas optimo de estas mismas
 import pygame
 
 lobby = [
@@ -67,4 +68,13 @@ jugador_saltar = [
     pygame.image.load("imagenes/saltar/2.png"),
     pygame.image.load("imagenes/saltar/3.png"),
     pygame.image.load("imagenes/saltar/4.png")
+]
+
+jugador_morir = [
+    pygame.image.load("imagenes/morir/0.png"),
+    pygame.image.load("imagenes/morir/1.png"),
+    pygame.image.load("imagenes/morir/2.png"),
+    pygame.image.load("imagenes/morir/3.png"),
+    pygame.image.load("imagenes/morir/4.png"),
+    pygame.image.load("imagenes/morir/5.png")
 ]

@@ -3,10 +3,11 @@ import sys
 from fondo import *
 from jugador import *
 
+#Tamaño constante de la ventaja de juego
 size = width, height = 1022, 588
 screen = pygame.display.set_mode(size)
 
-
+#Funcion de la logica de la tienda
 def mostrar_dialogo_tienda(screen, jugador):
     transparent_grey = (200, 200, 200, 200)  
     pygame.draw.rect(screen, transparent_grey, (0, 0, width, height), border_radius=20) 
@@ -35,9 +36,11 @@ def mostrar_dialogo_tienda(screen, jugador):
                 if event.key == pygame.K_ESCAPE:
                     esperando = False
 
+#Funcion principal del juego
 def main():
     pygame.init()
     
+    #Generacion de instancias
     pj = Jugador()
     pj_rect = pj.jugador.get_rect()
     
@@ -51,9 +54,11 @@ def main():
     portal3 = Portal(fondo)
     portal3_rect = portal3.imagen_portal.get_rect()
     
+    #Coordenadas (para el desarrollo solamente)
     pygame.font.init()
     font = pygame.font.Font(None, 36)
-        
+    
+    #Bucle principal de refrezcacion del juego
     while 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -78,13 +83,17 @@ def main():
                         if pj.monedas > 0 and pj.vel < 3:
                             pj.monedas -= 1
                             pj.vel += 1
-                
+        
+        #Llamado de las funciones necesarias
         pj.mover()
         pj.pegar()
         pj.saltar()
+        pj.morir()
         pj_rect.topleft = (pj.x, pj.y)
+        
         fondo.animar_fondo()
         fondo.cambiar_fondo()
+        
         portal1.animar_portal()
         portal1_rect.topleft = (47, 314)
         portal2.animar_portal()
@@ -92,6 +101,7 @@ def main():
         portal3.animar_portal()
         portal3_rect.topleft = (725, 314)
 
+        #Impresion de objetos en la pantalla
         screen.blit(fondo.imagen_fondo, fondo_rect)
         if fondo.num_fondo == 1:
             screen.blit(portal1.imagen_portal, portal1_rect)
@@ -99,12 +109,13 @@ def main():
             screen.blit(portal3.imagen_portal, portal3_rect)
         screen.blit(pj.jugador, pj_rect)
         
+        #Coordenadas
         coords_text = font.render(f"Coordenadas: ({pj.x}, {pj.y})", True, (255, 255, 255))
-        screen.blit(coords_text, (10, 10))
-        
-        
-        pj.dibujar_vida(screen)
+        screen.blit(coords_text, (250, 10))
 
+        pj.dibujar_vida(screen)
+        
+        #Logica de refrezco de pantalla
         pygame.display.update()
         pygame.time.delay(100)
         
