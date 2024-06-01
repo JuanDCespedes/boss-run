@@ -51,3 +51,20 @@ jugador_pegar = [
     pygame.image.load("imagenes/pegar/1.png"),
     pygame.image.load("imagenes/pegar/2.png")
 ]
+
+portal = [
+    pygame.image.load("imagenes/portal/0.png"),
+    pygame.image.load("imagenes/portal/1.png"),
+    pygame.image.load("imagenes/portal/2.png"),
+    pygame.image.load("imagenes/portal/3.png"),
+    pygame.image.load("imagenes/portal/4.png"),
+    pygame.image.load("imagenes/portal/5.png")
+]
+
+jugador_saltar = [
+    pygame.image.load("imagenes/saltar/0.png"),
+    pygame.image.load("imagenes/saltar/1.png"),
+    pygame.image.load("imagenes/saltar/2.png"),
+    pygame.image.load("imagenes/saltar/3.png"),
+    pygame.image.load("imagenes/saltar/4.png")
+]
