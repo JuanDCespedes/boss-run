@@ -2,6 +2,7 @@ import pygame
 import sys
 from fondo import *
 from jugador import *
+from boss3 import *
 
 #Tamaño constante de la ventaja de juego
 size = width, height = 1022, 588
@@ -86,6 +87,8 @@ def main():
     pygame.font.init()
     font = pygame.font.Font(None, 36)
     clock = pygame.time.Clock()
+    boss3= None
+    primera_entrada_jefe1=True
     #Bucle principal de refrezcacion del juego
     while 1:
         for event in pygame.event.get():
@@ -114,6 +117,7 @@ def main():
                         if pj.monedas > 0 and pj.vel < 3:
                             pj.monedas -= 1
                             pj.vel += 1
+        
         pygame.display.update()
         clock.tick(10)  # Mantener 10 FPS
         #Llamado de las funciones necesarias
@@ -125,16 +129,39 @@ def main():
         
         fondo.animar_fondo()
         fondo.cambiar_fondo()
-        
+        if fondo.num_fondo == 2:  # Asumiendo que 2 es el índice para "jefe_1.png"
+            if boss3 is None:
+                boss3 = Boss3()
+                print("Boss3 creado")
+            if primera_entrada_jefe1:
+                boss3.iniciar_cinematica()
+                primera_entrada_jefe1 = False
+                print("Primera entrada, iniciando cinemática")
+            boss3.actualizar_cinematica()
+            if boss3.cinematica_activa:
+                screen.fill((0, 0, 0))  # Fondo negro
+                boss3.draw(screen)
+                pygame.display.update()
+                continue
+            else:
+                # Código normal cuando no hay cinemática
+                screen.blit(fondo.imagen_fondo, fondo_rect)
+                screen.blit(pj.jugador, pj_rect)
+                boss3.draw(screen)
+        else:
+            boss3 = None  # Asegúrate de que el jefe no existe fuera de su habitación
+            primera_entrada_jefe1 = True
         portal1.animar_portal()
         portal1_rect.topleft = (47, 314)
         portal2.animar_portal()
         portal2_rect.topleft = (385, 314)
         portal3.animar_portal()
         portal3_rect.topleft = (725, 314)
-
+        
         #Impresion de objetos en la pantalla
         screen.blit(fondo.imagen_fondo, fondo_rect)
+        if boss3 is not None and not boss3.cinematica_activa:
+            boss3.draw(screen)
         if not (fondo.transicion and fondo.portal_usado):
             if fondo.num_fondo == 1:
                 screen.blit(portal1.imagen_portal, portal1_rect)

@@ -95,7 +95,7 @@ class Fondo():
                     self.num_fondo = 2
                     self.fondo_destino = pygame.image.load("imagenes/jefe_1.png")
                     self.portal_usado = "izquierda"
-                    self.jugador.cambiar_tamano(110, 90, 440, 100)
+                    self.jugador.cambiar_tamano(120, 90, 440, 100)
                 elif 440 <= self.jugador.x <= 500:
                     self.transicion = True
                     self.tiempo_transicion = 0
