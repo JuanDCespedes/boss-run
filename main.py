@@ -10,7 +10,7 @@ screen = pygame.display.set_mode(size)
 #Funcion de la logica de la tienda
 def mostrar_dialogo_tienda(screen, pj):
     pygame.draw.rect(screen, (200, 200, 200), (0, 0, width, height))  # Fondo gris claro
-    font = pygame.font.Font(None, 48)  # Fuente más grande
+    font = pygame.font.SysFont("Times new roman", 48)  # Fuente más grande
 
     textos = [
         ("Bienvenido a la tienda, ¿Qué deseas mejorar?", (width // 2, 100)),

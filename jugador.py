@@ -175,6 +175,6 @@ class Jugador():
         pygame.draw.rect(screen, (0, 255, 0), (10, 10, vida_actual, self.ancho_barra))
         pygame.draw.rect(screen, (255, 255, 255), (10, 10, self.largo_barra, self.ancho_barra), self.borde_barra)
 
-        font = pygame.font.SysFont("Arial", 24)
-        texto_vida = font.render(f"{self.vida}/20", True, (0, 0, 255))  
+        font = pygame.font.SysFont("Ravie", 24)
+        texto_vida = font.render(f"{self.vida}/{self.vida_max}", True, (0, 0, 255))  
         screen.blit(texto_vida, (10, 35))
