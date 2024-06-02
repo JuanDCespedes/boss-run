@@ -30,6 +30,30 @@ class Jugador():
         self.borde_barra = 2
         self.muerto = False
         self.contador_muerte = 0
+        self.tamano = 130
+        self.escalar_imagenes()
+        self.altura_salto = 40
+        self.cooldown_salto = 5  # 5 frames a 10 FPS = 0.5 segundos
+        self.tiempo_cooldown = 0  # Para contar el tiempo de cooldown
+        self.puede_saltar = True  # Para saber si puede saltar
+
+    def escalar_imagenes(self):
+        self.jugador = pygame.transform.scale(jugador_caminar[self.contador_j], (self.tamano, self.tamano))
+        for i in range(len(jugador_caminar)):
+            jugador_caminar[i] = pygame.transform.scale(jugador_caminar[i], (self.tamano, self.tamano))
+        for i in range(len(jugador_pegar)):
+            jugador_pegar[i] = pygame.transform.scale(jugador_pegar[i], (self.tamano, self.tamano))
+        for i in range(len(jugador_saltar)):
+            jugador_saltar[i] = pygame.transform.scale(jugador_saltar[i], (self.tamano, self.tamano))
+        for i in range(len(jugador_morir)):
+            jugador_morir[i] = pygame.transform.scale(jugador_morir[i], (self.tamano, self.tamano))
+    def cambiar_tamano(self, nuevo_tamano, nueva_x, nueva_y, nueva_altura_salto=None):
+        self.tamano = nuevo_tamano
+        self.x = nueva_x
+        self.y = nueva_y
+        if nueva_altura_salto is not None:
+            self.altura_salto = nueva_altura_salto
+        self.escalar_imagenes()
     
     #Función dedicada al movimiento horizontal del jugador
     def mover(self):
@@ -42,7 +66,7 @@ class Jugador():
             else:
                 self.contador_j += 1
             self.jugador = jugador_caminar[self.contador_j]
-            self.jugador = pygame.transform.scale(self.jugador, (130, 130))
+            self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
             if self.x < 960:
                 self.x += 15
                 self.x += self.velocidad
@@ -56,7 +80,7 @@ class Jugador():
             else:
                 self.contador_j += 1
             self.jugador = jugador_caminar[self.contador_j]
-            self.jugador = pygame.transform.scale(self.jugador, (130, 130))
+            self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
             self.jugador = pygame.transform.flip(self.jugador, True, False)
             if self.x > -75:
                 self.x -= 15
@@ -69,10 +93,10 @@ class Jugador():
             if not self.muerto:
                 if self.direccion == "d":
                     self.jugador = jugador_caminar[0]
-                    self.jugador = pygame.transform.scale(self.jugador, (130, 130))
+                    self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
                 elif self.direccion == "i":
                     self.jugador = jugador_caminar[0]
-                    self.jugador = pygame.transform.scale(self.jugador, (130, 130))
+                    self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
                     self.jugador = pygame.transform.flip(self.jugador, True, False)
     def mejorar(self, atributo):
         if self.monedas > 0 and self.mejoras[atributo] < 3:
@@ -100,12 +124,12 @@ class Jugador():
             if self.contador_ataque < len(jugador_pegar):
                 if self.direccion == "i":
                     self.jugador = jugador_pegar[self.contador_ataque]
-                    self.jugador = pygame.transform.scale(self.jugador, (130, 130))
+                    self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
                     self.jugador = pygame.transform.flip(self.jugador, True, False)
                     self.contador_ataque += 1
                 else:
                     self.jugador = jugador_pegar[self.contador_ataque]
-                    self.jugador = pygame.transform.scale(self.jugador, (130, 130))
+                    self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
                     self.contador_ataque += 1
             else:
                 self.atacando = False
@@ -114,31 +138,37 @@ class Jugador():
     #Función dedicada a la animación de salto del jugador
     def saltar(self):
         teclas = pygame.key.get_pressed()
-        
+        if not self.puede_saltar:
+            self.tiempo_cooldown += 1
+            if self.tiempo_cooldown >= self.cooldown_salto:
+                self.puede_saltar = True
+                self.tiempo_cooldown = 0
         #Lectura de la tecla de salto
-        if teclas[K_SPACE] and not self.saltando and not self.muerto:
+        if teclas[K_SPACE] and not self.saltando and not self.muerto and self.puede_saltar:
             self.saltando = True
             self.contador_salto = 0
+            self.puede_saltar = False  # Iniciar cooldown
+            self.tiempo_cooldown = 0
         
         #Logica de la animacion de salto
         if self.saltando:
             if self.contador_salto < len(jugador_saltar):
                 if self.direccion == "i":
                     self.jugador = jugador_saltar[self.contador_salto]
-                    self.jugador = pygame.transform.scale(self.jugador, (130, 130))
+                    self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
                     self.jugador = pygame.transform.flip(self.jugador, True, False)
                     if -1 < self.contador_salto < 2:
-                        self.y -= 40
+                        self.y -= self.altura_salto
                     elif 2 < self.contador_salto < 5:
-                        self.y += 40
+                        self.y += self.altura_salto
                     self.contador_salto += 1
                 else:
                     self.jugador = jugador_saltar[self.contador_salto]
-                    self.jugador = pygame.transform.scale(self.jugador, (130, 130))
+                    self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
                     if -1 < self.contador_salto < 2:
-                        self.y -= 40
+                        self.y -= self.altura_salto
                     elif 2 < self.contador_salto < 5:
-                        self.y += 40
+                        self.y += self.altura_salto
                     self.contador_salto += 1
             else:
                 self.saltando = False
@@ -153,12 +183,12 @@ class Jugador():
             if self.contador_muerte < (len(jugador_morir)):
                 if self.direccion == "i":
                     self.jugador = jugador_morir[self.contador_muerte]
-                    self.jugador = pygame.transform.scale(self.jugador, (130, 130))
+                    self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
                     self.jugador = pygame.transform.flip(self.jugador, True, False)
                     self.contador_muerte += 1
                 else:
                     self.jugador = jugador_morir[self.contador_muerte]
-                    self.jugador = pygame.transform.scale(self.jugador, (130, 130))
+                    self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
                     self.contador_muerte += 1
                     
                 

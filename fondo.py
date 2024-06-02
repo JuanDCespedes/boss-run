@@ -11,8 +11,11 @@ class Fondo():
         self.num_fondo = 0
         self.imagen_fondo = lobby[self.contador_f]
         self.jugador = jugador
-        self.transicion = False  # Nuevo atributo para manejar la transición
-        self.tiempo_transicion = 0  # Para contar el tiempo de la transición
+        self.transicion = False
+        self.tiempo_transicion = 0
+        self.tiempo_transicion_total = 10  # 10 frames a 10 FPS = 1 segundo
+        self.fondo_destino = None  # Para guardar el fondo al que vamos a transicionar
+        self.portal_usado = None  # Para saber qué portal se usó: "izquierda", "centro" o "derecha"
     
     #Función dedicada a refrezcar el fondo
     def animar_fondo(self):
@@ -22,7 +25,17 @@ class Fondo():
             else:
                 self.contador_f += 1
             self.imagen_fondo = lobby[self.contador_f]
+            pass
+        elif self.transicion and self.portal_usado:
+            self.imagen_fondo = pantalla_carga
+            self.tiempo_transicion += 1
+            if self.tiempo_transicion > self.tiempo_transicion_total:
+                self.transicion = False
+                self.tiempo_transicion = 0
+                self.imagen_fondo = self.fondo_destino
+                self.portal_usado = None
         elif self.num_fondo == 1:
+            self.imagen_fondo = pygame.image.load("imagenes/habitacion.png")
             if self.transicion:
                 self.imagen_fondo = pantalla_carga
                 self.tiempo_transicion += 1
@@ -33,6 +46,7 @@ class Fondo():
             else:
                 self.imagen_fondo = pygame.image.load("imagenes/habitacion.png")
         elif self.num_fondo == 2:
+            self.imagen_fondo = pygame.image.load("imagenes/jefe_1.png")
             if self.transicion:
                 self.imagen_fondo = pantalla_carga
                 self.tiempo_transicion += 1
@@ -43,6 +57,7 @@ class Fondo():
             else:
                 self.imagen_fondo = pygame.image.load("imagenes/jefe_1.png")
         elif self.num_fondo == 3:
+            self.imagen_fondo = pygame.image.load("imagenes/jefe_2.png")
             if self.transicion:
                 self.imagen_fondo = pantalla_carga
                 self.tiempo_transicion += 1
@@ -53,6 +68,7 @@ class Fondo():
             else:
                 self.imagen_fondo = pygame.image.load("imagenes/jefe_2.png")
         elif self.num_fondo == 4:
+            self.imagen_fondo = pygame.image.load("imagenes/jefe_3.png")
             if self.transicion:
                 self.imagen_fondo = pantalla_carga
                 self.tiempo_transicion += 1
@@ -71,25 +87,31 @@ class Fondo():
         if teclas[K_UP]:
             if 402 <= self.jugador.x <= 510 and self.num_fondo == 0:
                 self.num_fondo = 1
-                self.transicion = True  # Iniciar la transición
-                self.tiempo_transicion = 0
+                self.imagen_fondo = pygame.image.load("imagenes/habitacion.png")
             elif self.num_fondo == 1:
                 if 105 <= self.jugador.x <= 165:
+                    self.transicion = True
+                    self.tiempo_transicion = 0
                     self.num_fondo = 2
-                    self.transicion = True
-                    self.tiempo_transicion = 0
+                    self.fondo_destino = pygame.image.load("imagenes/jefe_1.png")
+                    self.portal_usado = "izquierda"
+                    self.jugador.cambiar_tamano(110, 90, 440, 100)
                 elif 440 <= self.jugador.x <= 500:
+                    self.transicion = True
+                    self.tiempo_transicion = 0
                     self.num_fondo = 3
-                    self.transicion = True
-                    self.tiempo_transicion = 0
+                    self.fondo_destino = pygame.image.load("imagenes/jefe_2.png")
+                    self.portal_usado = "centro"
                 elif 780 <= self.jugador.x <= 840:
-                    self.num_fondo = 4
                     self.transicion = True
                     self.tiempo_transicion = 0
+                    self.num_fondo = 4
+                    self.fondo_destino = pygame.image.load("imagenes/jefe_3.png")
+                    self.portal_usado = "derecha"
         if teclas[K_LEFT] and self.num_fondo == 1 and self.jugador.x == -75:
             self.num_fondo = 0
-            self.transicion = True
-            self.tiempo_transicion = 0
+            self.imagen_fondo = lobby[self.contador_f]
+            self.jugador.cambiar_tamano(130, 0, 450, 40)
 
 #Clase dedicada al manejo de los portales
 class Portal():

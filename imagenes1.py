@@ -80,3 +80,4 @@ jugador_morir = [
 ]
 
 pantalla_carga=pygame.image.load("imagenes/pantallacarga.jpg")
+pantalla_carga=pygame.transform.scale(pantalla_carga, (1022, 588))

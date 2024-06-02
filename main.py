@@ -135,11 +135,12 @@ def main():
 
         #Impresion de objetos en la pantalla
         screen.blit(fondo.imagen_fondo, fondo_rect)
-        if fondo.num_fondo == 1:
-            screen.blit(portal1.imagen_portal, portal1_rect)
-            screen.blit(portal2.imagen_portal, portal2_rect)
-            screen.blit(portal3.imagen_portal, portal3_rect)
-        screen.blit(pj.jugador, pj_rect)
+        if not (fondo.transicion and fondo.portal_usado):
+            if fondo.num_fondo == 1:
+                screen.blit(portal1.imagen_portal, portal1_rect)
+                screen.blit(portal2.imagen_portal, portal2_rect)
+                screen.blit(portal3.imagen_portal, portal3_rect)
+            screen.blit(pj.jugador, pj_rect)
         
         #Coordenadas
         coords_text = font.render(f"Coordenadas: ({pj.x}, {pj.y})", True, (255, 255, 255))
