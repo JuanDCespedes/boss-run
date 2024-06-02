@@ -85,7 +85,7 @@ def main():
     #Coordenadas (para el desarrollo solamente)
     pygame.font.init()
     font = pygame.font.Font(None, 36)
-    
+    clock = pygame.time.Clock()
     #Bucle principal de refrezcacion del juego
     while 1:
         for event in pygame.event.get():
@@ -114,7 +114,8 @@ def main():
                         if pj.monedas > 0 and pj.vel < 3:
                             pj.monedas -= 1
                             pj.vel += 1
-        
+        pygame.display.update()
+        clock.tick(10)  # Mantener 10 FPS
         #Llamado de las funciones necesarias
         pj.mover()
         pj.pegar()

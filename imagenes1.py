@@ -78,3 +78,5 @@ jugador_morir = [
     pygame.image.load("imagenes/morir/4.png"),
     pygame.image.load("imagenes/morir/5.png")
 ]
+
+pantalla_carga=pygame.image.load("imagenes/pantallacarga.jpg")
