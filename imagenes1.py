@@ -82,24 +82,35 @@ jugador_morir = [
 pantalla_carga=pygame.image.load("imagenes/pantallacarga.jpg")
 pantalla_carga=pygame.transform.scale(pantalla_carga, (1022, 588))
 
-boss3_cinematica = [
-    pygame.image.load("imagenes/boss3/cinematica/cine1.png"),
-    pygame.image.load("imagenes/boss3/cinematica/cine2.png"),
-    pygame.image.load("imagenes/boss3/cinematica/cine3.png"),
-    pygame.image.load("imagenes/boss3/cinematica/cine4.png"),
-    pygame.image.load("imagenes/boss3/cinematica/cine5.png"),
-    pygame.image.load("imagenes/boss3/cinematica/cine6.png"),
-    pygame.image.load("imagenes/boss3/cinematica/cine7.png"),
-    pygame.image.load("imagenes/boss3/cinematica/cine8.png"),
-    pygame.image.load("imagenes/boss3/cinematica/cine9.png"),
-    pygame.image.load("imagenes/boss3/cinematica/cine10.png"),
-    pygame.image.load("imagenes/boss3/cinematica/cine11.png"),
-    pygame.image.load("imagenes/boss3/cinematica/cine12.png"),
-    pygame.image.load("imagenes/boss3/cinematica/cine13.png")
+boss1_cinematica = [
+    pygame.image.load("imagenes/boss1/cinematica/cine1.png"),
+    pygame.image.load("imagenes/boss1/cinematica/cine2.png"),
+    pygame.image.load("imagenes/boss1/cinematica/cine3.png"),
+    pygame.image.load("imagenes/boss1/cinematica/cine4.png"),
+    pygame.image.load("imagenes/boss1/cinematica/cine5.png"),
+    pygame.image.load("imagenes/boss1/cinematica/cine6.png"),
+    pygame.image.load("imagenes/boss1/cinematica/cine7.png"),
+    pygame.image.load("imagenes/boss1/cinematica/cine8.png"),
+    pygame.image.load("imagenes/boss1/cinematica/cine9.png"),
+    pygame.image.load("imagenes/boss1/cinematica/cine10.png"),
+    pygame.image.load("imagenes/boss1/cinematica/cine11.png"),
+    pygame.image.load("imagenes/boss1/cinematica/cine12.png"),
+    pygame.image.load("imagenes/boss1/cinematica/cine13.png")
 ]
-for i in range(len(boss3_cinematica)):
-    boss3_cinematica[i] = pygame.transform.flip(boss3_cinematica[i], True, False)
-    boss3_cinematica[i] = pygame.transform.scale(boss3_cinematica[i], (200, 200))
-boss3_imagen=pygame.image.load("imagenes/boss3/cinematica/cine13.png")
-boss3_imagen = pygame.transform.flip(boss3_imagen, True, False)  # Voltear horizontalmente
-boss3_imagen = pygame.transform.scale(boss3_imagen, (200, 200))
+for i in range(len(boss1_cinematica)):
+    boss1_cinematica[i] = pygame.transform.flip(boss1_cinematica[i], True, False)
+    boss1_cinematica[i] = pygame.transform.scale(boss1_cinematica[i], (200, 200))
+boss1_imagen=pygame.image.load("imagenes/boss1/cinematica/cine13.png")
+boss1_imagen = pygame.transform.flip(boss1_imagen, True, False)  # Voltear horizontalmente
+boss1_imagen = pygame.transform.scale(boss1_imagen, (200, 200))
+
+jefe3_entrada = [
+    pygame.image.load("imagenes/boss3/entrada/0.png"),
+    pygame.image.load("imagenes/boss3/entrada/1.png"),
+    pygame.image.load("imagenes/boss3/entrada/2.png"),
+    pygame.image.load("imagenes/boss3/entrada/3.png"),
+    pygame.image.load("imagenes/boss3/entrada/4.png"),
+    pygame.image.load("imagenes/boss3/entrada/5.png"),
+    pygame.image.load("imagenes/boss3/entrada/6.png"),
+    pygame.image.load("imagenes/boss3/entrada/7.png"),
+]

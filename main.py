@@ -2,6 +2,7 @@ import pygame
 import sys
 from fondo import *
 from jugador import *
+from boss1 import *
 from boss3 import *
 
 #Tamaño constante de la ventaja de juego
@@ -83,11 +84,14 @@ def main():
     portal3 = Portal(fondo)
     portal3_rect = portal3.imagen_portal.get_rect()
     
+    jefe3 = Jefe3()
+    jefe3_rect = jefe3.jefe3.get_rect()
+    
     #Coordenadas (para el desarrollo solamente)
     pygame.font.init()
     font = pygame.font.Font(None, 36)
     clock = pygame.time.Clock()
-    boss3= None
+    boss1= None
     primera_entrada_jefe1=True
     #Bucle principal de refrezcacion del juego
     while 1:
@@ -130,26 +134,26 @@ def main():
         fondo.animar_fondo()
         fondo.cambiar_fondo()
         if fondo.num_fondo == 2:  # Asumiendo que 2 es el índice para "jefe_1.png"
-            if boss3 is None:
-                boss3 = Boss3()
-                print("Boss3 creado")
+            if boss1 is None:
+                boss1 = Boss1()
+                print("Boss1 creado")
             if primera_entrada_jefe1:
-                boss3.iniciar_cinematica()
+                boss1.iniciar_cinematica()
                 primera_entrada_jefe1 = False
                 print("Primera entrada, iniciando cinemática")
-            boss3.actualizar_cinematica()
-            if boss3.cinematica_activa:
+            boss1.actualizar_cinematica()
+            if boss1.cinematica_activa:
                 screen.fill((0, 0, 0))  # Fondo negro
-                boss3.draw(screen)
+                boss1.draw(screen)
                 pygame.display.update()
                 continue
             else:
                 # Código normal cuando no hay cinemática
                 screen.blit(fondo.imagen_fondo, fondo_rect)
                 screen.blit(pj.jugador, pj_rect)
-                boss3.draw(screen)
+                boss1.draw(screen)
         else:
-            boss3 = None  # Asegúrate de que el jefe no existe fuera de su habitación
+            boss1 = None  # Asegúrate de que el jefe no existe fuera de su habitación
             primera_entrada_jefe1 = True
         portal1.animar_portal()
         portal1_rect.topleft = (47, 314)
@@ -160,14 +164,19 @@ def main():
         
         #Impresion de objetos en la pantalla
         screen.blit(fondo.imagen_fondo, fondo_rect)
-        if boss3 is not None and not boss3.cinematica_activa:
-            boss3.draw(screen)
+        if boss1 is not None and not boss1.cinematica_activa:
+            boss1.draw(screen)
         if not (fondo.transicion and fondo.portal_usado):
             if fondo.num_fondo == 1:
                 screen.blit(portal1.imagen_portal, portal1_rect)
                 screen.blit(portal2.imagen_portal, portal2_rect)
                 screen.blit(portal3.imagen_portal, portal3_rect)
             screen.blit(pj.jugador, pj_rect)
+        if fondo.num_fondo == 4:
+            jefe3_rect.topleft = (jefe3.xj3, jefe3.yj3)
+            screen.blit(jefe3.jefe3, jefe3_rect)
+        
+        jefe3.entrada_jefe3()
         
         #Coordenadas
         coords_text = font.render(f"Coordenadas: ({pj.x}, {pj.y})", True, (255, 255, 255))
