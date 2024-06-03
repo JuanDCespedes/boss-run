@@ -99,10 +99,10 @@ boss1_cinematica = [
 ]
 for i in range(len(boss1_cinematica)):
     boss1_cinematica[i] = pygame.transform.flip(boss1_cinematica[i], True, False)
-    boss1_cinematica[i] = pygame.transform.scale(boss1_cinematica[i], (200, 200))
-boss1_imagen=pygame.image.load("imagenes/boss1/cinematica/cine13.png")
+    boss1_cinematica[i] = pygame.transform.scale(boss1_cinematica[i], (70, 230))
+boss1_imagen=pygame.image.load("imagenes/boss1/caminar/0.png")
 boss1_imagen = pygame.transform.flip(boss1_imagen, True, False)  # Voltear horizontalmente
-boss1_imagen = pygame.transform.scale(boss1_imagen, (200, 200))
+boss1_imagen = pygame.transform.scale(boss1_imagen, (70, 230))
 
 jefe3_entrada = [
     pygame.image.load("imagenes/boss3/entrada/0.png"),
