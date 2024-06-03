@@ -32,10 +32,11 @@ class Jugador():
         self.contador_muerte = 0
         self.tamano = 130
         self.escalar_imagenes()
-        self.altura_salto = 40
+        self.altura_salto = 60
         self.cooldown_salto = 5  # 5 frames a 10 FPS = 0.5 segundos
         self.tiempo_cooldown = 0  # Para contar el tiempo de cooldown
         self.puede_saltar = True  # Para saber si puede saltar
+        self.game_over = False
 
     def escalar_imagenes(self):
         self.jugador = pygame.transform.scale(jugador_caminar[self.contador_j], (self.tamano, self.tamano))

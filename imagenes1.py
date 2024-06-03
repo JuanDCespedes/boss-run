@@ -114,3 +114,65 @@ jefe3_entrada = [
     pygame.image.load("imagenes/boss3/entrada/6.png"),
     pygame.image.load("imagenes/boss3/entrada/7.png"),
 ]
+
+jefe3_estatico = [
+    pygame.image.load("imagenes/boss3/estatico/0.png"),
+    pygame.image.load("imagenes/boss3/estatico/1.png"),
+    pygame.image.load("imagenes/boss3/estatico/2.png"),
+    pygame.image.load("imagenes/boss3/estatico/3.png"),
+    pygame.image.load("imagenes/boss3/estatico/4.png"),
+    pygame.image.load("imagenes/boss3/estatico/5.png")
+]
+
+gotadefuego = [
+    pygame.image.load("imagenes/boss3/gotadefuego/0.png"),
+    pygame.image.load("imagenes/boss3/gotadefuego/1.png"),
+    pygame.image.load("imagenes/boss3/gotadefuego/2.png"),
+    pygame.image.load("imagenes/boss3/gotadefuego/3.png"),
+    pygame.image.load("imagenes/boss3/gotadefuego/4.png"),
+    pygame.image.load("imagenes/boss3/gotadefuego/5.png"),
+    pygame.image.load("imagenes/boss3/gotadefuego/6.png"),
+    pygame.image.load("imagenes/boss3/gotadefuego/7.png"),
+    pygame.image.load("imagenes/boss3/gotadefuego/8.png"),
+    pygame.image.load("imagenes/boss3/gotadefuego/9.png"),
+    pygame.image.load("imagenes/boss3/gotadefuego/10.png"),
+    pygame.image.load("imagenes/boss3/gotadefuego/11.png"),
+]
+
+jefe3_ataque2 = [
+    pygame.image.load("imagenes/boss3/ataque2/0.png"),
+    pygame.image.load("imagenes/boss3/ataque2/1.png"),
+    pygame.image.load("imagenes/boss3/ataque2/2.png"),
+    pygame.image.load("imagenes/boss3/ataque2/3.png"),
+    pygame.image.load("imagenes/boss3/ataque2/4.png"),
+    pygame.image.load("imagenes/boss3/ataque2/5.png"),
+    pygame.image.load("imagenes/boss3/ataque2/6.png"),
+    pygame.image.load("imagenes/boss3/ataque2/7.png")
+]
+
+oladefuego = [
+    pygame.image.load("imagenes/boss3/oladefuego/0.png"),
+    pygame.image.load("imagenes/boss3/oladefuego/1.png"),
+    pygame.image.load("imagenes/boss3/oladefuego/2.png"),
+    pygame.image.load("imagenes/boss3/oladefuego/3.png"),
+    pygame.image.load("imagenes/boss3/oladefuego/4.png"),
+    pygame.image.load("imagenes/boss3/oladefuego/5.png")
+]
+
+jefe3_ataque1 = [
+    pygame.image.load("imagenes/boss3/ataque1/0.png"),
+    pygame.image.load("imagenes/boss3/ataque1/1.png"),
+    pygame.image.load("imagenes/boss3/ataque1/2.png"),
+    pygame.image.load("imagenes/boss3/ataque1/3.png"),
+    pygame.image.load("imagenes/boss3/ataque1/4.png"),
+    pygame.image.load("imagenes/boss3/ataque1/5.png"),
+    pygame.image.load("imagenes/boss3/ataque1/6.png"),
+    pygame.image.load("imagenes/boss3/ataque1/7.png"),
+    pygame.image.load("imagenes/boss3/ataque1/6.png"),
+    pygame.image.load("imagenes/boss3/ataque1/5.png"),
+    pygame.image.load("imagenes/boss3/ataque1/4.png"),
+    pygame.image.load("imagenes/boss3/ataque1/3.png"),
+    pygame.image.load("imagenes/boss3/ataque1/2.png"),
+    pygame.image.load("imagenes/boss3/ataque1/1.png"),
+    pygame.image.load("imagenes/boss3/ataque1/0.png"),
+]
