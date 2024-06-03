@@ -1,3 +1,4 @@
+# main.py
 import pygame
 import sys
 from fondo import *
@@ -5,12 +6,12 @@ from jugador import *
 from boss1 import *
 from boss3 import *
 
-#Tamaño constante de la ventaja de juego
+# Tamaño constante de la ventaja de juego
 size = width, height = 1022, 588
 screen = pygame.display.set_mode(size)
 BLACK = (0, 0, 0)
 
-#Funcion de la logica de la tienda
+# Función de la lógica de la tienda
 def mostrar_dialogo_tienda(screen, pj):
     pygame.draw.rect(screen, (200, 200, 200), (0, 0, width, height))  # Fondo gris claro
     font = pygame.font.SysFont("Times new roman", 48)  # Fuente más grande
@@ -67,11 +68,11 @@ def mostrar_dialogo_tienda(screen, pj):
 
         pygame.display.update()
 
-#Funcion principal del juego
+# Función principal del juego
 def main():
     pygame.init()
     
-    #Generacion de instancias
+    # Generación de instancias
     pj = Jugador()
     pj_rect = pj.jugador.get_rect()
     
@@ -88,13 +89,13 @@ def main():
     jefe3 = Jefe3(fondo)
     jefe3_rect = jefe3.jefe3.get_rect()
     
-    #Coordenadas (para el desarrollo solamente)
+    # Coordenadas (para el desarrollo solamente)
     pygame.font.init()
     font = pygame.font.Font(None, 36)
     clock = pygame.time.Clock()
     boss1= None
     primera_entrada_jefe1=True
-    #Bucle principal de refrezcacion del juego
+    # Bucle principal de refrescación del juego
     while 1:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -125,7 +126,7 @@ def main():
         
         pygame.display.update()
         clock.tick(10)  # Mantener 10 FPS
-        #Llamado de las funciones necesarias
+        # Llamado de las funciones necesarias
         pj.mover()
         pj.pegar()
         pj.saltar()
@@ -135,7 +136,7 @@ def main():
         fondo.animar_fondo()
         fondo.cambiar_fondo()
         fondo.pantalla_muerte()
-        if fondo.num_fondo == 2:  # Asumiendo que 2 es el índice para "jefe_1.png"
+        if fondo.num_fondo == 2 and not fondo.transicion:  # Asumiendo que 2 es el índice para "jefe_1.png"
             if boss1 is None:
                 boss1 = Boss1()
                 print("Boss1 creado")
@@ -145,18 +146,19 @@ def main():
                 print("Primera entrada, iniciando cinemática")
             boss1.actualizar_cinematica()
             if boss1.cinematica_activa:
-                screen.fill((0, 0, 0))  # Fondo negro
-                boss1.draw(screen)
+                screen.blit(fondo.imagen_fondo, fondo_rect)  # Dibuja el fondo primero
+                boss1.draw(screen, fondo.imagen_fondo)  # Pasa el fondo al método draw del Boss1
                 pygame.display.update()
                 continue
             else:
                 # Código normal cuando no hay cinemática
                 screen.blit(fondo.imagen_fondo, fondo_rect)
                 screen.blit(pj.jugador, pj_rect)
-                boss1.draw(screen)
+                boss1.draw(screen, fondo.imagen_fondo)
         else:
             boss1 = None  # Asegúrate de que el jefe no existe fuera de su habitación
             primera_entrada_jefe1 = True
+        
         portal1.animar_portal()
         portal1_rect.topleft = (47, 314)
         portal2.animar_portal()
@@ -164,7 +166,7 @@ def main():
         portal3.animar_portal()
         portal3_rect.topleft = (725, 314)
         
-        #Impresion de objetos en la pantalla
+        # Impresión de objetos en la pantalla
         screen.blit(fondo.imagen_fondo, fondo_rect)
         
         fade_surface = pygame.Surface((1022, 588))
@@ -178,7 +180,7 @@ def main():
             screen.blit(gameover_text, (325, 230))
         
         if boss1 is not None and not boss1.cinematica_activa:
-            boss1.draw(screen)
+            boss1.draw(screen, fondo.imagen_fondo)  # Pasa el fondo al método draw del Boss1
         if not (fondo.transicion and fondo.portal_usado):
             if fondo.num_fondo == 1:
                 screen.blit(portal1.imagen_portal, portal1_rect)
@@ -191,13 +193,13 @@ def main():
         
         jefe3.entrada_jefe3()
         
-        #Coordenadas
+        # Coordenadas
         coords_text = font.render(f"Coordenadas: ({pj.x}, {pj.y})", True, (255, 255, 255))
         screen.blit(coords_text, (250, 10))
 
         pj.dibujar_vida(screen)
         
-        #Logica de refrezco de pantalla
+        # Lógica de refresco de pantalla
         pygame.display.update()
         pygame.time.delay(100)
         
