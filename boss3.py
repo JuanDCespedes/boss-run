@@ -1,9 +1,10 @@
 from imagenes1 import *
+from fondo import *
 
 #Clase encargada del jefe 3
 class Jefe3():
     #Inicialización de variables
-    def __init__(self):
+    def __init__(self, fondos):
         self.contador_gj3 = 0
         self.contador_aj3 = 0
         self.tamano = 120
@@ -12,10 +13,11 @@ class Jefe3():
         self.xj3 = -30
         self.yj3 = 450
         self.distancia = 10
+        self.fondos = fondos
 
     #Función encargada de la animación de entrada del jefe 3
     def entrada_jefe3(self):
-        if self.contador_gj3 == 0:    
+        if self.contador_gj3 == 0 and self.fondos.num_fondo == 4:    
             if self.contador_aj3 == 7:
                 self.jefe3 = jefe3_entrada[self.contador_aj3]
                 self.yj3 = 450
@@ -35,6 +37,6 @@ class Jefe3():
             self.jefe3 = pygame.transform.scale(self.jefe3, (self.tamano, self.tamano))
 
     #Función encargada de la animación cuando el jefe esta quieto
-    def estatico_jefe3(self):
-        if self.contador_gj3 == 1:
+    #def estatico_jefe3(self):
+        #if self.contador_gj3 == 1:
             

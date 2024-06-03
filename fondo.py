@@ -8,7 +8,7 @@ class Fondo():
     def __init__(self, jugador):
         self.contador_f = 0
         self.lobby = lobby[self.contador_f]
-        self.num_fondo = 4
+        self.num_fondo = 0
         self.imagen_fondo = lobby[self.contador_f]
         self.jugador = jugador
         self.transicion = False
@@ -16,6 +16,7 @@ class Fondo():
         self.tiempo_transicion_total = 10  # 10 frames a 10 FPS = 1 segundo
         self.fondo_destino = None  # Para guardar el fondo al que vamos a transicionar
         self.portal_usado = None  # Para saber qué portal se usó: "izquierda", "centro" o "derecha"
+        self.opacidad = 0
     
     #Función dedicada a refrezcar el fondo
     def animar_fondo(self):
@@ -112,6 +113,13 @@ class Fondo():
             self.num_fondo = 0
             self.imagen_fondo = lobby[self.contador_f]
             self.jugador.cambiar_tamano(130, 0, 450, 40)
+    
+    #Función encargada de cambiar el fondo a fondo de muerte
+    def pantalla_muerte(self):
+        if self.jugador.vida == 0:
+            if self.opacidad < 255:
+                self.opacidad += 17
+        
 
 #Clase dedicada al manejo de los portales
 class Portal():

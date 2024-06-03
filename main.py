@@ -8,6 +8,7 @@ from boss3 import *
 #Tamaño constante de la ventaja de juego
 size = width, height = 1022, 588
 screen = pygame.display.set_mode(size)
+BLACK = (0, 0, 0)
 
 #Funcion de la logica de la tienda
 def mostrar_dialogo_tienda(screen, pj):
@@ -84,7 +85,7 @@ def main():
     portal3 = Portal(fondo)
     portal3_rect = portal3.imagen_portal.get_rect()
     
-    jefe3 = Jefe3()
+    jefe3 = Jefe3(fondo)
     jefe3_rect = jefe3.jefe3.get_rect()
     
     #Coordenadas (para el desarrollo solamente)
@@ -133,6 +134,7 @@ def main():
         
         fondo.animar_fondo()
         fondo.cambiar_fondo()
+        fondo.pantalla_muerte()
         if fondo.num_fondo == 2:  # Asumiendo que 2 es el índice para "jefe_1.png"
             if boss1 is None:
                 boss1 = Boss1()
@@ -164,6 +166,17 @@ def main():
         
         #Impresion de objetos en la pantalla
         screen.blit(fondo.imagen_fondo, fondo_rect)
+        
+        fade_surface = pygame.Surface((1022, 588))
+        fade_surface.fill(BLACK)
+        fade_surface.set_alpha(fondo.opacidad)
+        screen.blit(fade_surface, (0, 0))
+        
+        if fondo.opacidad == 255:
+            font1 = pygame.font.SysFont("Arial", 74)
+            gameover_text = font1.render(f"GAME OVER", True, (135, 0, 0))
+            screen.blit(gameover_text, (325, 230))
+        
         if boss1 is not None and not boss1.cinematica_activa:
             boss1.draw(screen)
         if not (fondo.transicion and fondo.portal_usado):
