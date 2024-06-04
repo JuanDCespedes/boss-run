@@ -242,13 +242,14 @@ def main():
                     jefe3.ataque_ola = False
                     jefe3.contador_x = 1
             if jefe3.ataque_llama:
-                jefe3_rect = jefe3.jefe3.get_rect()
-                if pj_rect.colliderect(jefe3_rect):
-                    pj.recibir_dano(1)
-                if jefe3.contador_gj3 == 6 and jefe3.contador_j3 == 15:
+                if jefe3.contador_gj3 == 6 and jefe3.contador_j3 == 14:
                     jefe3.contador_x = 0
                     jefe3.ataque_llama = False
-        
+                    jefe3.contador_j3 = 0
+                    jefe3.contador_gj3 = 1
+            if jefe3.ataque_llama:
+                if pj_rect.colliderect(jefe3_rect):
+                    pj.recibir_dano(1)
         
         # Coordenadas
         coords_text = font.render(f"Coordenadas: ({pj.x}, {pj.y})", True, (255, 255, 255))

@@ -17,6 +17,7 @@ class Jefe3():
         self.ataque_ola = False
         self.contador_x = 0
         self.ataque_llama = False
+        self.vida = 100
 
     #Función encargada de la animación de entrada del jefe 3
     def entrada_jefe3(self):
