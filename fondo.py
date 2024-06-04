@@ -8,7 +8,7 @@ class Fondo():
     def __init__(self, jugador):
         self.contador_f = 0
         self.lobby = lobby[self.contador_f]
-        self.num_fondo = 4
+        self.num_fondo = 0
         self.imagen_fondo = lobby[self.contador_f]
         self.jugador = jugador
         self.transicion = False

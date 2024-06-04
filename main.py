@@ -212,44 +212,54 @@ def main():
             
         #Impresion del escenario del jefe 3
         if fondo.num_fondo == 4 and not fondo.transicion and not pj.game_over:
-            for lluvia in lluvias:
-                lluvia.gota_de_fuego()
-                lluvia_rect = lluvia.gota.get_rect(topleft=(lluvia.x, lluvia.y))
-                screen.blit(lluvia.gota, lluvia_rect)
-                if lluvia.y > height:  # Si la gota de fuego sale de la pantalla, resetéala
-                    lluvias.remove(lluvia)
-                if pj_rect.colliderect(lluvia_rect):
-                    pj.recibir_dano(1)
-                    lluvias.remove(lluvia)
-            jefe3_rect.topleft = (jefe3.xj3, jefe3.yj3)
-            screen.blit(jefe3.jefe3, jefe3_rect)
-            jefe3.entrada_jefe3()
-            jefe3.estatico_jefe3()
-            jefe3.ataque()
-            if jefe3.contador_gj3 == 6 and jefe3.contador_j3 == 6:
-                ola = Ola()
-            if jefe3.ataque_ola:
-                ola.ola_de_fuego()
-                ola_rect = ola.ola.get_rect(topleft=(ola.x, ola.y))
-                screen.blit(ola.ola, ola_rect)
-                if ola.x == -100:
-                    jefe3.ataque_ola = False
-                    del ola
-                    jefe3.contador_x = 1
-                if pj_rect.colliderect(ola_rect):
-                    pj.recibir_dano(1)
-                    del ola
-                    jefe3.ataque_ola = False
-                    jefe3.contador_x = 1
-            if jefe3.ataque_llama:
-                if jefe3.contador_gj3 == 6 and jefe3.contador_j3 == 14:
-                    jefe3.contador_x = 0
-                    jefe3.ataque_llama = False
-                    jefe3.contador_j3 = 0
-                    jefe3.contador_gj3 = 1
-            if jefe3.ataque_llama:
-                if pj_rect.colliderect(jefe3_rect):
-                    pj.recibir_dano(1)
+            if jefe3.vida != 0: 
+                for lluvia in lluvias:
+                    lluvia.gota_de_fuego()
+                    lluvia_rect = lluvia.gota.get_rect(topleft=(lluvia.x, lluvia.y))
+                    screen.blit(lluvia.gota, lluvia_rect)
+                    if lluvia.y > height:  # Si la gota de fuego sale de la pantalla, resetéala
+                        lluvias.remove(lluvia)
+                    if pj_rect.colliderect(lluvia_rect):
+                        pj.recibir_dano(1)
+                        lluvias.remove(lluvia)
+                jefe3_rect.topleft = (jefe3.xj3, jefe3.yj3)
+                screen.blit(jefe3.jefe3, jefe3_rect)
+                jefe3.entrada_jefe3()
+                jefe3.estatico_jefe3()
+                jefe3.ataque()
+                if jefe3.contador_gj3 == 6 and jefe3.contador_j3 == 6:
+                    ola = Ola()
+                if jefe3.ataque_ola:
+                    ola.ola_de_fuego()
+                    ola_rect = ola.ola.get_rect(topleft=(ola.x, ola.y))
+                    screen.blit(ola.ola, ola_rect)
+                    if ola.x == -100:
+                        jefe3.ataque_ola = False
+                        del ola
+                        jefe3.contador_x = 1
+                    if pj_rect.colliderect(ola_rect):
+                        pj.recibir_dano(1)
+                        del ola
+                        jefe3.ataque_ola = False
+                        jefe3.contador_x = 1
+                if jefe3.ataque_llama:
+                    if jefe3.contador_gj3 == 6 and jefe3.contador_j3 == 14:
+                        jefe3.contador_x = 0
+                        jefe3.ataque_llama = False
+                        jefe3.contador_j3 = 0
+                        jefe3.contador_gj3 = 1
+                if jefe3.ataque_llama:
+                    if pj_rect.colliderect(jefe3_rect.inflate(170, 0)):
+                        pj.recibir_dano(1)
+                jefe3.dibujar_vida(screen)
+                jefe3.rect = jefe3.jefe3.get_rect(topleft=(jefe3.xj3, jefe3.yj3))
+                pj.aplicar_daño(jefe3)
+            elif jefe3.vida == 0:
+                if jefe3.contador_mj3 == 3:
+                    jefe3.yj3 = 525
+                jefe3.morir()
+                jefe3_rect.topleft = (jefe3.xj3, jefe3.yj3)
+                screen.blit(jefe3.jefe3, jefe3_rect)
         
         # Coordenadas
         coords_text = font.render(f"Coordenadas: ({pj.x}, {pj.y})", True, (255, 255, 255))
@@ -258,7 +268,19 @@ def main():
         #pj.recibir_dano(1)
         pj.dibujar_vida(screen)
         
-        #Logica de recibir daño
+        #Logica de ESC
+        teclas = pygame.key.get_pressed()
+        if teclas[K_ESCAPE]:
+            if pj.game_over:
+                fondo.num_fondo = 0
+                pj.vida = 20
+                pj.game_over = False
+                fondo.opacidad = 0
+                pj.muerto = False
+                pj.contador_muerte = 0
+            if fondo.num_fondo == 4 and jefe3.vida == 0:
+                pj.vida = 20
+                fondo.num_fondo = 0
         
         # Lógica de refresco de pantalla
         pygame.display.update()

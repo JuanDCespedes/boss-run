@@ -100,6 +100,7 @@ class Jugador():
                     self.jugador = jugador_caminar[0]
                     self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
                     self.jugador = pygame.transform.flip(self.jugador, True, False)
+                    
     def mejorar(self, atributo):
         if self.monedas > 0 and self.mejoras[atributo] < 3:
             self.monedas -= 1
@@ -112,6 +113,7 @@ class Jugador():
                 pass
             elif atributo == "VEL":
                 self.velocidad += 5
+                
     #Función dedicada a la animacion del ataque del jugador
     def pegar(self):
         teclas = pygame.key.get_pressed()
@@ -141,6 +143,7 @@ class Jugador():
                 self.atacando = False
                 self.contador_j = 0
                 self.rect_ataque = None
+                
     def aplicar_daño(self, objetivo):
         if self.atacando and self.rect_ataque and self.rect_ataque.colliderect(objetivo.rect):
             objetivo.recibir_dano(self.daño)
@@ -203,8 +206,6 @@ class Jugador():
                     self.jugador = jugador_morir[self.contador_muerte]
                     self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
                     self.contador_muerte += 1
-                    
-                
 
     def recibir_dano(self, cantidad):
         self.vida -= cantidad

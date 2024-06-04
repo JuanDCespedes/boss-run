@@ -13,11 +13,16 @@ class Jefe3():
         self.yj3 = 430
         self.distancia = 10
         self.fondos = fondos
-        self.contador_aj3 = 0
+        self.contador_mj3 = 0
         self.ataque_ola = False
         self.contador_x = 0
         self.ataque_llama = False
-        self.vida = 100
+        self.vida = 200
+        self.largo_barra = 200
+        self.ancho_barra = 20
+        self.borde_barra = 2
+        self.vida_max = 200
+        self.rect = self.jefe3.get_rect(topleft=(self.xj3, self.yj3))
 
     #Función encargada de la animación de entrada del jefe 3
     def entrada_jefe3(self):
@@ -40,7 +45,7 @@ class Jefe3():
 
     #Función encargada de la animación cuando el jefe esta quieto
     def estatico_jefe3(self):
-        if 1 <= self.contador_gj3 <= 5:
+        if 1 <= self.contador_gj3 <= 5 and self.vida != 0:
             if self.contador_j3 == 5:
                 self.contador_j3 = 0
                 self.contador_gj3 += 1
@@ -50,7 +55,7 @@ class Jefe3():
     
     #Funcion encargada de la animacion de ataque del jefe
     def ataque(self):
-        if self.contador_gj3 == 6 and self.contador_x == 0:
+        if self.contador_gj3 == 6 and self.contador_x == 0 and self.vida != 0:
             if self.contador_j3 == 7:
                 self.contador_gj3 = 1
                 self.contador_j3 = 0
@@ -58,7 +63,7 @@ class Jefe3():
             else:
                 self.contador_j3 += 1
             self.jefe3 = jefe3_ataque2[self.contador_j3]
-        if self.contador_gj3 == 6 and self.contador_x == 1:
+        if self.contador_gj3 == 6 and self.contador_x == 1 and self.vida != 0:
             if self.contador_gj3 == 6 and self.contador_x == 1 and self.contador_j3 == 0:
                 self.ataque_llama = True
             if self.contador_j3 == 14:
@@ -67,6 +72,32 @@ class Jefe3():
             else:
                 self.contador_j3 += 1
             self.jefe3 = jefe3_ataque1[self.contador_j3]
+    
+    #Funcion encargada del daño recibido por el jugador
+    def recibir_dano(self, cantidad):
+        self.vida -= cantidad
+        if self.vida < 0:
+            self.vida = 0
+    
+    #Funcion encargada de dibujar la vida del jefe
+    def dibujar_vida(self, screen):
+        vida_actual = int((self.vida / 200) * self.largo_barra)
+        
+        pygame.draw.rect(screen, (0, 255, 0), (800, 10, self.largo_barra, self.ancho_barra))
+        pygame.draw.rect(screen, (255, 0, 0), (800, 10, vida_actual, self.ancho_barra))
+        pygame.draw.rect(screen, (255, 255, 255), (800, 10, self.largo_barra, self.ancho_barra), self.borde_barra)
+
+        font = pygame.font.SysFont("Ravie", 24)
+        texto_vida = font.render(f"{self.vida}/{self.vida_max}", True, (0, 0, 255))  
+        screen.blit(texto_vida, (800, 35))
+        
+    #Funcion encargada de la muerte del jefe
+    def morir(self):
+        if self.vida == 0:
+            if self.contador_mj3 < 3:
+                self.contador_mj3 += 1
+            self.jefe3 = jefe3_morir[self.contador_mj3]
+            
 
 #Clase encargada de la lluvia de fuegod el jefe 3
 class Lluvia():

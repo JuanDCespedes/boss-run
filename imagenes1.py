@@ -176,3 +176,10 @@ jefe3_ataque1 = [
     pygame.image.load("imagenes/boss3/ataque1/1.png"),
     pygame.image.load("imagenes/boss3/ataque1/0.png"),
 ]
+
+jefe3_morir = [
+    pygame.image.load("imagenes/boss3/muerte/0.png"),
+    pygame.image.load("imagenes/boss3/muerte/1.png"),
+    pygame.image.load("imagenes/boss3/muerte/2.png"),
+    pygame.image.load("imagenes/boss3/muerte/3.png")
+]
