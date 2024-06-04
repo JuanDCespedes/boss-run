@@ -37,6 +37,7 @@ class Jugador():
         self.tiempo_cooldown = 0  # Para contar el tiempo de cooldown
         self.puede_saltar = True  # Para saber si puede saltar
         self.game_over = False
+        self.daño = 1
 
     def escalar_imagenes(self):
         self.jugador = pygame.transform.scale(jugador_caminar[self.contador_j], (self.tamano, self.tamano))
@@ -119,10 +120,14 @@ class Jugador():
         if teclas[K_z] and not self.atacando and not self.muerto:
             self.atacando = True
             self.contador_ataque = 0
-
+            if self.direccion == "d":
+                self.rect_ataque = pygame.Rect(self.x + self.tamano, self.y, self.tamano // 2, self.tamano)
+            else:
+                self.rect_ataque = pygame.Rect(self.x - self.tamano // 2, self.y, self.tamano // 2, self.tamano)
         #Logica de la animación del ataque
         if self.atacando:
             if self.contador_ataque < len(jugador_pegar):
+                
                 if self.direccion == "i":
                     self.jugador = jugador_pegar[self.contador_ataque]
                     self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
@@ -135,6 +140,13 @@ class Jugador():
             else:
                 self.atacando = False
                 self.contador_j = 0
+                self.rect_ataque = None
+    def aplicar_daño(self, objetivo):
+        if self.atacando and self.rect_ataque and self.rect_ataque.colliderect(objetivo.rect):
+            objetivo.recibir_dano(self.daño)
+            print(f"¡Golpe! El jugador hizo {self.daño} de daño.")
+            return True
+        return False
     
     #Función dedicada a la animación de salto del jugador
     def saltar(self):
