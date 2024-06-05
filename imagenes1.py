@@ -1,6 +1,5 @@
 #Archivo dedicado a agrupar las imagenes para un uso mas optimo de estas mismas
 import pygame
-
 lobby = [
     pygame.image.load("imagenes/lobby/0.png"),
     pygame.image.load("imagenes/lobby/1.png"),
@@ -99,10 +98,10 @@ boss1_cinematica = [
 ]
 for i in range(len(boss1_cinematica)):
     boss1_cinematica[i] = pygame.transform.flip(boss1_cinematica[i], True, False)
-    boss1_cinematica[i] = pygame.transform.scale(boss1_cinematica[i], (70, 230))
+    boss1_cinematica[i] = pygame.transform.scale(boss1_cinematica[i], (80, 160))
 boss1_imagen=pygame.image.load("imagenes/boss1/caminar/0.png")
 boss1_imagen = pygame.transform.flip(boss1_imagen, True, False)  # Voltear horizontalmente
-boss1_imagen = pygame.transform.scale(boss1_imagen, (70, 230))
+boss1_imagen = pygame.transform.scale(boss1_imagen, (80, 160))
 
 jefe3_entrada = [
     pygame.image.load("imagenes/boss3/entrada/0.png"),
@@ -182,4 +181,55 @@ jefe3_morir = [
     pygame.image.load("imagenes/boss3/muerte/1.png"),
     pygame.image.load("imagenes/boss3/muerte/2.png"),
     pygame.image.load("imagenes/boss3/muerte/3.png")
+]
+boss1_caminar = [
+    pygame.image.load("imagenes/boss1/caminar/0.png"),
+    pygame.image.load("imagenes/boss1/caminar/1.png"),
+    pygame.image.load("imagenes/boss1/caminar/2.png"),
+    pygame.image.load("imagenes/boss1/caminar/3.png"),
+    pygame.image.load("imagenes/boss1/caminar/4.png"),
+    pygame.image.load("imagenes/boss1/caminar/5.png"),
+    pygame.image.load("imagenes/boss1/caminar/6.png"),
+    pygame.image.load("imagenes/boss1/caminar/7.png")
+]
+for i in range(len(boss1_caminar)):
+    boss1_caminar[i] = pygame.transform.flip(boss1_caminar[i], True, False)  # Voltear horizontalmente
+    boss1_caminar[i] = pygame.transform.scale(boss1_caminar[i], (50, 160))
+boss1_ataque = [
+    pygame.image.load("imagenes/boss1/ataque/0.png"),
+    pygame.image.load("imagenes/boss1/ataque/1.png"),
+    pygame.image.load("imagenes/boss1/ataque/2.png"),
+    pygame.image.load("imagenes/boss1/ataque/3.png")
+]
+for i in range(len(boss1_ataque)):
+    boss1_ataque[i] = pygame.transform.flip(boss1_ataque[i], True, False)
+    boss1_ataque[i] = pygame.transform.scale(boss1_ataque[i], (80, 160))
+
+boss2_caminar = [ 
+    pygame.image.load("imagenes/boss2/caminar/0.png"),
+    pygame.image.load("imagenes/boss2/caminar/1.png"),
+    pygame.image.load("imagenes/boss2/caminar/2.png"),
+    pygame.image.load("imagenes/boss2/caminar/3.png"),
+    pygame.image.load("imagenes/boss2/caminar/4.png")
+ ]
+boss2_atacar = [ 
+    pygame.image.load("imagenes/boss2/caminar/atacar/atrrack1.png"),
+    pygame.image.load("imagenes/boss2/caminar/atacar/atrrack2.png"),
+    pygame.image.load("imagenes/boss2/caminar/atacar/atrack3.png"),
+    pygame.image.load("imagenes/boss2/caminar/atacar/atrack4.png"),
+    pygame.image.load("imagenes/boss2/caminar/atacar/atrack5.png")
+]
+boss2_morir = [    
+    pygame.image.load("imagenes/boss2/caminar/morir/dead.png"),
+    pygame.image.load("imagenes/boss2/caminar/morir/dead1.png"),
+    pygame.image.load("imagenes/boss2/caminar/morir/dead2.png"),
+    pygame.image.load("imagenes/boss2/caminar/morir/dead3.png"),
+    pygame.image.load("imagenes/boss2/caminar/morir/dead4.png")
+    ]
+boss1_ataque_corriendo = [
+    pygame.image.load("imagenes/boss1/ataque_corriendo/0.png"),
+    pygame.image.load("imagenes/boss1/ataque_corriendo/1.png"),
+    pygame.image.load("imagenes/boss1/ataque_corriendo/2.png"),
+    pygame.image.load("imagenes/boss1/ataque_corriendo/3.png"),
+    pygame.image.load("imagenes/boss1/ataque_corriendo/4.png")
 ]

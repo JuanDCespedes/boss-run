@@ -3,6 +3,7 @@ import sys
 from fondo import *
 from jugador import *
 from boss1 import *
+from boss2 import Boss 
 from boss3 import *
 
 # Tamaño constante de la ventana de juego
@@ -71,6 +72,8 @@ def mostrar_dialogo_tienda(screen, pj):
 def main():
     pygame.init()
     
+    boss2 = None
+
     # Generación de instancias
     pj = Jugador()
     pj_rect = pj.jugador.get_rect()
@@ -156,6 +159,7 @@ def main():
             if boss1 is None:
                 boss1 = Boss1()
                 print("Boss1 creado")
+
             if primera_entrada_jefe1:
                 boss1.iniciar_cinematica()
                 primera_entrada_jefe1 = False
@@ -171,9 +175,35 @@ def main():
                 screen.blit(fondo.imagen_fondo, fondo_rect)
                 screen.blit(pj.jugador, pj_rect)
                 boss1.draw(screen, fondo.imagen_fondo)
+                if not boss1.atacando_corriendo:  # Verifica si el Boss1 no está atacando corriendo
+                    boss1.caminar(pj.x)
+                boss1.atacar(pj)
+                boss1.atacar_corriendo(pj)
+                boss1.dibujar_vida(screen)
         else:
             boss1 = None  # Asegúrate de que el jefe no existe fuera de su habitación
             primera_entrada_jefe1 = True
+         # Funciones del jefe 2
+        if fondo.num_fondo == 3 and not fondo.transicion and not pj.game_over:  # Asumiendo que 3 es el índice para "jefe_2.png"
+            if boss2 is None:
+                # Crear una instancia del boss 2 con las coordenadas iniciales
+                boss2 = Boss(400, 300)
+
+            # Dibujar al boss 2
+            boss2.dibujar(screen)
+
+            # Aquí puedes agregar la lógica adicional del boss 2, como mover(), atacar(), etc.
+            boss2.mover()
+            boss2.atacar(pj)
+
+        else:
+            # Si no estamos en la habitación del boss 2, asignar None al boss2
+            boss2 = None
+
+        # Impresión del jefe 2 (si existe)
+        if boss2 is not None:
+            boss2.dibujar(screen)
+                
         
         #Funciones de los portales
         portal1.animar_portal()

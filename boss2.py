@@ -1,38 +1,45 @@
-# boss.py
-
 import pygame
-import random
 
-class Boss(pygame.sprite.Sprite):
-    def __init__(self, width, height, player_pos):
-        super().__init__()
+class Boss:
+    def __init__(self, x, y):
+        self.imagenes_correr = []  # Lista de imagenes del boss corriendo
+        self.imagenes_ataque = []  # Lista de imagenes del boss atacando
+        self.imagen_actual = 0
+        self.boss = self.imagenes_correr[self.imagen_actual]
+        self.boss = pygame.transform.scale(self.boss, (200, 200))
+        self.x = x
+        self.y = y
+        self.direccion = "d"
+        self.vida = 50
+        self.velocidad = 10
+        self.recibiendo_dano = False
 
-        self.image = pygame.image.load("boss.png").convert_alpha()
-        self.rect = self.image.get_rect()
+    def mover(self):
+        if self.direccion == "d":
+            self.x += self.velocidad
+        else:
+            self.x -= self.velocidad
 
-        self.width = width
-        self.height = height
-        self.player_pos = player_pos
+        # Cambio de dirección al alcanzar los bordes
+        if self.x >= 800 - 200:  # Asumiendo que la pantalla tiene 800 px de ancho
+            self.direccion = "i"
+        elif self.x <= 0:
+            self.direccion = "d"
 
-        self.speed = 5
-        self.direction = 1  # 1 para moverse a la derecha, -1 para moverse a la izquierda
+    def recibir_dano(self, cantidad):
+        self.vida -= cantidad
+        if self.vida <= 0:
+            self.vida = 0
+            self.morir()
 
-    def update(self):
-        # Movimiento horizontal
-        self.rect.x += self.speed * self.direction
+    def atacar(self, jugador):
+        # Verificar si el jugador está en la posición correcta para recibir daño (por la espalda)
+        if self.direccion == "d" and jugador.x < self.x or self.direccion == "i" and jugador.x > self.x:
+            jugador.recibir_dano(10)
 
-        # Cambiar la dirección si llega a los límites de la pantalla
-        if self.rect.right >= self.width or self.rect.left <= 0:
-            self.direction *= -1
+    def morir(self):
+        self.muerto = True
+        # Aquí podrías añadir animación o lógica adicional para la muerte del boss
 
-        # Movimiento vertical (subiendo y bajando)
-        if self.player_pos[1] < self.rect.y:
-            self.rect.y -= self.speed
-        elif self.player_pos[1] > self.rect.y:
-            self.rect.y += self.speed
-
-    def damage_player(self, player_rect):
-        # Verificar si el jugador está detrás del boss
-        if self.rect.x < player_rect.x:
-            player_rect.x -= 10  # Hacer daño al jugador (moverlo hacia atrás)
-
+    def dibujar(self, pantalla):
+        pantalla.blit(self.boss, (self.x, self.y))

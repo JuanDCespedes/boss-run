@@ -38,6 +38,7 @@ class Jugador():
         self.puede_saltar = True  # Para saber si puede saltar
         self.game_over = False
         self.daño = 1
+        self.rect = self.jugador.get_rect(topleft=(self.x, self.y))
 
     def escalar_imagenes(self):
         self.jugador = pygame.transform.scale(jugador_caminar[self.contador_j], (self.tamano, self.tamano))
@@ -72,6 +73,7 @@ class Jugador():
             if self.x < 960:
                 self.x += 15
                 self.x += self.velocidad
+                self.rect.x = self.x
             self.direccion = "d"
             
         
@@ -87,6 +89,7 @@ class Jugador():
             if self.x > -75:
                 self.x -= 15
                 self.x -= self.velocidad
+                self.rect.x = self.x
             self.direccion = "i"
             
         
@@ -183,8 +186,10 @@ class Jugador():
                     self.jugador = pygame.transform.scale(self.jugador, (self.tamano, self.tamano))
                     if -1 < self.contador_salto < 2:
                         self.y -= self.altura_salto
+                        self.rect.y = self.y
                     elif 2 < self.contador_salto < 5:
                         self.y += self.altura_salto
+                        self.rect.y = self.y
                     self.contador_salto += 1
             else:
                 self.saltando = False
