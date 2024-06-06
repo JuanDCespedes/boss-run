@@ -3,7 +3,7 @@ import sys
 from fondo import *
 from jugador import *
 from boss1 import *
-from boss2 import Boss 
+from boss2 import *
 from boss3 import *
 
 # Tamaño constante de la ventana de juego
@@ -155,7 +155,7 @@ def main():
         
         # Funciones de refrescar pantalla
         fondo.animar_fondo()
-        fondo.cambiar_fondo(boss1_muerto)
+        fondo.cambiar_fondo(boss1_muerto, boss3_muerto)
         fondo.pantalla_muerte()
         if boss1_muerto and fondo.num_fondo == 2:
             fondo.num_fondo = 0
@@ -253,9 +253,11 @@ def main():
             boss1.draw(screen, fondo.imagen_fondo)
         if not (fondo.transicion and fondo.portal_usado):
             if fondo.num_fondo == 1 and not pj.game_over:
-                screen.blit(portal1.imagen_portal, portal1_rect)
+                if not boss1_muerto:
+                    screen.blit(portal1.imagen_portal, portal1_rect)
                 screen.blit(portal2.imagen_portal, portal2_rect)
-                screen.blit(portal3.imagen_portal, portal3_rect)
+                if not boss3_muerto:
+                    screen.blit(portal3.imagen_portal, portal3_rect)
             screen.blit(pj.jugador, pj_rect)
         
         if fondo.num_fondo == 4 and not fondo.transicion and not pj.game_over:
@@ -302,12 +304,26 @@ def main():
                 jefe3.rect = jefe3.jefe3.get_rect(topleft=(jefe3.xj3, jefe3.yj3))
                 pj.aplicar_daño(jefe3)
             
-            elif jefe3.vida == 0:
+            elif jefe3.vida <= 0:
                 if jefe3.contador_mj3 == 3:
                     jefe3.yj3 = 525
                 jefe3.morir()
                 jefe3_rect.topleft = (jefe3.xj3, jefe3.yj3)
                 screen.blit(jefe3.jefe3, jefe3_rect)
+            
+            if jefe3.esta_muerto() and not boss3_muerto:
+                boss3_muerto = True
+            if boss3_muerto and not boss3_monedas_dadas:
+                pj.vida = pj.vida_max
+                pj.monedas += 1
+                boss3_monedas_dadas = True
+                print("Jugador recupera vida y gana 1 moneda")
+        
+                fondo.num_fondo = 0
+                jefe3 = None
+                pj.x = 450
+                pj.y = 450
+                print("Jugador vuelve al lobby")
         
         # Coordenadas
         coords_text = font.render(f"Coordenadas: ({pj.x}, {pj.y})", True, (255, 255, 255))
@@ -320,7 +336,7 @@ def main():
         if teclas[K_ESCAPE]:
             if pj.game_over:
                 fondo.num_fondo = 0
-                pj.vida = 20
+                pj.vida = pj.vida_max
                 pj.game_over = False
                 fondo.opacidad = 0
                 pj.muerto = False

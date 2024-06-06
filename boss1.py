@@ -187,7 +187,7 @@ class Boss1:
                 else:
                     self.imagen = boss1_ataque[self.frame_ataque]
                     self.imagen = pygame.transform.flip(self.imagen, self.direccion == 1, False)
-                    self.imagen = pygame.transform.scale(self.imagen, (50, 220))
+                    self.imagen = pygame.transform.scale(self.imagen, (50, 160))
     def morir(self):
         if self.vida <= 0 and not self.muriendo:
             self.muriendo = True

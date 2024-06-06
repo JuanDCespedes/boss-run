@@ -112,8 +112,7 @@ class Jugador():
                 self.vida_max += 10
                 self.vida = self.vida_max
             elif atributo == "ATK":
-                # No es necesario hacer nada aquí, ya que no tienes una variable de daño
-                pass
+                self.daño+=1
             elif atributo == "VEL":
                 self.velocidad += 5
                 

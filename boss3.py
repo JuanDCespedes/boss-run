@@ -23,6 +23,7 @@ class Jefe3():
         self.borde_barra = 2
         self.vida_max = 200
         self.rect = self.jefe3.get_rect(topleft=(self.xj3, self.yj3))
+        self.muriendo = False
 
     #Función encargada de la animación de entrada del jefe 3
     def entrada_jefe3(self):
@@ -93,10 +94,19 @@ class Jefe3():
         
     #Funcion encargada de la muerte del jefe
     def morir(self):
-        if self.vida == 0:
-            if self.contador_mj3 < 3:
+        if self.vida <= 0 and not self.muriendo:
+            self.muriendo = True
+            self.contador_mj3 = 0
+            print("Jefe3 muriendo")
+
+        if self.muriendo:
+            if self.contador_mj3 < len(jefe3_morir) - 1:
                 self.contador_mj3 += 1
-            self.jefe3 = jefe3_morir[self.contador_mj3]
+                if self.contador_mj3 == 3:
+                    self.yj3 = 525
+                self.jefe3 = jefe3_morir[self.contador_mj3]
+    def esta_muerto(self):
+        return self.muriendo and self.contador_mj3 == len(jefe3_morir) - 1
             
 
 #Clase encargada de la lluvia de fuegod el jefe 3
@@ -134,5 +144,4 @@ class Ola():
             self.contador_o += 1
         self.ola = oladefuego[self.contador_o]
         self.x -= 50
-    def esta_muerto(self):
-        return self.vida <= 0
+    

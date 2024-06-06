@@ -82,7 +82,7 @@ class Fondo():
     
     
     #Función dedicada al cambio de habitación
-    def cambiar_fondo(self, boss1_muerto=False):
+    def cambiar_fondo(self, boss1_muerto=False, boss3_muerto=False):
         teclas = pygame.key.get_pressed()
         
         if teclas[K_UP]:
@@ -107,7 +107,7 @@ class Fondo():
                     self.num_fondo = 3
                     self.fondo_destino = pygame.image.load("imagenes/jefe_2.png")
                     self.portal_usado = "centro"
-                elif 690 <= self.jugador.x <= 870:
+                elif 690 <= self.jugador.x <= 870 and not boss3_muerto:
                     print ("Entrando al portal derecho")
                     self.transicion = True
                     self.tiempo_transicion = 0
