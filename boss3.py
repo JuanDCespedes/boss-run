@@ -144,4 +144,3 @@ class Ola():
             self.contador_o += 1
         self.ola = oladefuego[self.contador_o]
         self.x -= 50
-    
