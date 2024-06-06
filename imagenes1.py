@@ -213,8 +213,8 @@ boss2_caminar = [
     pygame.image.load("imagenes/boss2/caminar/4.png")
  ]
 boss2_atacar = [ 
-    pygame.image.load("imagenes/boss2/caminar/atacar/atrrack1.png"),
-    pygame.image.load("imagenes/boss2/caminar/atacar/atrrack2.png"),
+    pygame.image.load("imagenes/boss2/caminar/atacar/ataque1.png"),
+    pygame.image.load("imagenes/boss2/caminar/atacar/ataque2.png"),
     pygame.image.load("imagenes/boss2/caminar/atacar/atrack3.png"),
     pygame.image.load("imagenes/boss2/caminar/atacar/atrack4.png"),
     pygame.image.load("imagenes/boss2/caminar/atacar/atrack5.png")

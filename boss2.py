@@ -3,15 +3,17 @@ from imagenes1 import *
 
 class Boss:
     def __init__(self, x, y):
+        self.vida = 1
+        self.vida_max = 1
         self.imagenes_correr = boss2_caminar  # Asignar la lista de imagenes cargada
         self.imagenes_ataque = boss2_atacar  # Asignar la lista de imagenes cargada  
         self.imagen_actual = 0
         self.boss = self.imagenes_correr[self.imagen_actual]
         self.boss = pygame.transform.scale(self.boss, (200, 200))
-        self.x = x
-        self.y = y
+        self.x = 700
+        self.y = 400
+        self.imagen  = boss2_imagen 
         self.direccion = "d"
-        self.vida = 50
         self.velocidad = 10
         self.recibiendo_dano = False
 

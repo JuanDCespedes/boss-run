@@ -17,6 +17,7 @@ class Fondo():
         self.fondo_destino = None  # Para guardar el fondo al que vamos a transicionar
         self.portal_usado = None  # Para saber qué portal se usó: "izquierda", "centro" o "derecha"
         self.opacidad = 0
+        self.transicion_completa = False
     
     #Función dedicada a refrezcar el fondo
     def animar_fondo(self):
@@ -66,6 +67,7 @@ class Fondo():
                     self.transicion = False
                     self.tiempo_transicion = 0
                     self.imagen_fondo = pygame.image.load("imagenes/jefe_2.png")
+                    self.transicion_completa=True
             else:
                 self.imagen_fondo = pygame.image.load("imagenes/jefe_2.png")
         elif self.num_fondo == 4:

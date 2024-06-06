@@ -100,6 +100,7 @@ def main():
     clock = pygame.time.Clock()
     boss1 = None
     primera_entrada_jefe1 = True
+    primera_entrada_jefe2 = True 
     boss1_muerto = False
     boss1_monedas_dadas = False
     boss3_muerto = False
@@ -156,6 +157,8 @@ def main():
         # Funciones de refrescar pantalla
         fondo.animar_fondo()
         fondo.cambiar_fondo(boss1_muerto, boss3_muerto)
+        if not fondo.transicion:
+            fondo.animar_fondo()
         fondo.pantalla_muerte()
         if boss1_muerto and fondo.num_fondo == 2:
             fondo.num_fondo = 0
@@ -210,22 +213,25 @@ def main():
         #Inicializar boss2 como None
         boss2 = None
 
-
+        print(f"Fondo actual: {fondo.num_fondo}, Transición: {fondo.transicion}, Transición completa: {fondo.transicion_completa}")
         #Funciones del jefe 2 
         if fondo.num_fondo == 3 and not pj.game_over:
-
-            if boss2 is None: 
-                boss2 = Boss(400, 300)
-                print("Boss2 creado")
-
+            print("Entrando a la habitación del jefe 2")
+            if not fondo.transicion:
+                print("La transición ha terminado")
+                if boss2 is None:
+                    print("Creando instancia del Boss2") 
+                    boss2 = Boss(400, 300)
+                    print("Boss2 creado")
+            else: 
+                print("La transición está en curso")
             if boss2 is not None:
+                print(f"Posición del Boss2: ({boss2.x}, {boss2.y})")
                 boss2.dibujar(screen)
                 boss2.mover()
                 boss2.atacar(pj)
         
-        else: 
-            # si no estamos en la habitación del Boss2, asignar None al boss2 
-            boss2 = None
+            
 
         # Funciones de los portales
         portal1.animar_portal()
