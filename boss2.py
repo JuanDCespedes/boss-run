@@ -1,9 +1,10 @@
 import pygame
+from imagenes1 import *
 
 class Boss:
     def __init__(self, x, y):
-        self.imagenes_correr = []  # Lista de imagenes del boss corriendo
-        self.imagenes_ataque = []  # Lista de imagenes del boss atacando
+        self.imagenes_correr = boss2_caminar  # Asignar la lista de imagenes cargada
+        self.imagenes_ataque = boss2_atacar  # Asignar la lista de imagenes cargada  
         self.imagen_actual = 0
         self.boss = self.imagenes_correr[self.imagen_actual]
         self.boss = pygame.transform.scale(self.boss, (200, 200))
@@ -35,7 +36,7 @@ class Boss:
     def atacar(self, jugador):
         # Verificar si el jugador está en la posición correcta para recibir daño (por la espalda)
         if self.direccion == "d" and jugador.x < self.x or self.direccion == "i" and jugador.x > self.x:
-            jugador.recibir_dano(10)
+            jugador.recibir_dano(3)
 
     def morir(self):
         self.muerto = True

@@ -37,7 +37,7 @@ class Jugador():
         self.tiempo_cooldown = 0  # Para contar el tiempo de cooldown
         self.puede_saltar = True  # Para saber si puede saltar
         self.game_over = False
-        self.daño = 1
+        self.daño = 1000
         self.rect = self.jugador.get_rect(topleft=(self.x, self.y))
 
     def escalar_imagenes(self):

@@ -203,7 +203,7 @@ boss1_ataque = [
 ]
 for i in range(len(boss1_ataque)):
     boss1_ataque[i] = pygame.transform.flip(boss1_ataque[i], True, False)
-    boss1_ataque[i] = pygame.transform.scale(boss1_ataque[i], (80, 160))
+    boss1_ataque[i] = pygame.transform.scale(boss1_ataque[i], (50, 160))
 
 boss2_caminar = [ 
     pygame.image.load("imagenes/boss2/caminar/0.png"),
@@ -233,3 +233,16 @@ boss1_ataque_corriendo = [
     pygame.image.load("imagenes/boss1/ataque_corriendo/3.png"),
     pygame.image.load("imagenes/boss1/ataque_corriendo/4.png")
 ]
+boss1_muerte = [
+    pygame.image.load("imagenes/boss1/muerte/0.png"),
+    pygame.image.load("imagenes/boss1/muerte/1.png"),
+    pygame.image.load("imagenes/boss1/muerte/2.png"),
+    pygame.image.load("imagenes/boss1/muerte/3.png"),
+    pygame.image.load("imagenes/boss1/muerte/4.png"),
+    pygame.image.load("imagenes/boss1/muerte/5.png"),
+    pygame.image.load("imagenes/boss1/muerte/6.png"),
+    pygame.image.load("imagenes/boss1/muerte/7.png")
+]
+for i in range(len(boss1_muerte)):
+    boss1_muerte[i] = pygame.transform.flip(boss1_muerte[i], True, False)
+    boss1_muerte[i] = pygame.transform.scale(boss1_muerte[i], (80, 160))

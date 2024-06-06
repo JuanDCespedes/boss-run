@@ -2,7 +2,7 @@ import pygame
 from pygame.locals import *
 from imagenes1 import *
 from jugador import *
-
+from boss1 import *
 #Clase dedicada al manejo del fondo
 class Fondo():
     def __init__(self, jugador):
@@ -82,7 +82,7 @@ class Fondo():
     
     
     #Función dedicada al cambio de habitación
-    def cambiar_fondo(self):
+    def cambiar_fondo(self, boss1_muerto=False):
         teclas = pygame.key.get_pressed()
         
         if teclas[K_UP]:
@@ -90,20 +90,25 @@ class Fondo():
                 self.num_fondo = 1
                 self.imagen_fondo = pygame.image.load("imagenes/habitacion.png")
             elif self.num_fondo == 1:
-                if 105 <= self.jugador.x <= 165:
+                print(f"posicion del jugador: ({self.jugador.x}, {self.jugador.y})")
+                print(f"Fondo actual: {self.num_fondo}")
+                if 0 <= self.jugador.x <= 210 and not boss1_muerto:  # Verifica si el Boss1 no ha sido derrotado
+                    print("Entrando al portal izquierdo")
                     self.transicion = True
                     self.tiempo_transicion = 0
                     self.num_fondo = 2
                     self.fondo_destino = pygame.image.load("imagenes/jefe_1.png")
                     self.portal_usado = "izquierda"
                     self.jugador.cambiar_tamano(120, 90, 440, 170)
-                elif 440 <= self.jugador.x <= 500:
+                elif 360 <= self.jugador.x <= 540:
+                    print("Entrando al portal del centro (Boss2)")
                     self.transicion = True
                     self.tiempo_transicion = 0
                     self.num_fondo = 3
                     self.fondo_destino = pygame.image.load("imagenes/jefe_2.png")
                     self.portal_usado = "centro"
-                elif 780 <= self.jugador.x <= 840:
+                elif 690 <= self.jugador.x <= 870:
+                    print ("Entrando al portal derecho")
                     self.transicion = True
                     self.tiempo_transicion = 0
                     self.num_fondo = 4

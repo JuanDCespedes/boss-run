@@ -6,8 +6,8 @@ import random
 
 class Boss1:
     def __init__(self):
-        self.vida = 1000  # Vida inicial del jefe
-        self.vida_max = 1000
+        self.vida = 1  # Vida inicial del jefe
+        self.vida_max = 1
         self.x = 780  # Posición x inicial
         self.y = 400  # Posición y inicial ajustada
         self.imagen = boss1_imagen
@@ -44,6 +44,10 @@ class Boss1:
         self.tiempo_quieto_total = 25 
         self.cooldown_ataque_corriendo = random.randint(30, 70)  # Cooldown inicial aleatorio de 3 a 7 segundos (en milisegundos)
         self.ultimo_ataque_corriendo = pygame.time.get_ticks()
+        self.muriendo = False
+        self.frame_muerte = 0.5
+        self.frames_por_muerte = 2
+        self.contador_muerte = 0
     def actualizar_cinematica(self):
         if self.cinematica_activa and not self.cinematica_mostrada:
             self.contador_frames += 1
@@ -60,7 +64,7 @@ class Boss1:
                     self.mostrar_barra_vida = True
                     print("Mostrando barra de vida del Boss1")
     def atacar_corriendo(self, jugador):
-        if not self.atacando_corriendo and not self.atacando and not self.tiempo_quieto:
+        if not self.atacando_corriendo and not self.atacando and not self.tiempo_quieto and not self.muriendo:
             if pygame.time.get_ticks() - self.ultimo_ataque_corriendo >= self.cooldown_ataque_corriendo:
                 self.atacando_corriendo = True
                 self.frame_ataque_corriendo = 0
@@ -111,7 +115,7 @@ class Boss1:
             self.contador_frames = 0
             print("Iniciando cinemática")
     def caminar(self, jugador_x):
-        if self.caminando:
+        if self.caminando and not self.muriendo:
             self.contador_pasos += 1
             if self.contador_pasos >= self.frames_por_paso:
                 self.contador_pasos = 0
@@ -129,7 +133,9 @@ class Boss1:
             self.x += self.velocidad * self.direccion
             self.rect.x = self.x        
     def draw(self, screen, fondo):
-        if self.cinematica_activa:
+        if self.muriendo:
+            screen.blit(self.imagen, self.rect)
+        elif self.cinematica_activa:
             screen.blit(fondo, (0, 0))  # Dibuja el fondo primero
             screen.blit(boss1_cinematica[self.frame_actual], (self.x, self.y))  # Dibuja la cinemática en la posición correcta
         else:
@@ -152,17 +158,12 @@ class Boss1:
         # Dibuja el borde de la barra (blanco)
             pygame.draw.rect(screen, (255, 255, 255), (pos_x, pos_y, self.largo_barra, self.alto_barra), self.borde_barra)
         
-        # Dibuja el texto debajo de la barra
-            font = pygame.font.SysFont("Arial", 24, bold=True)
-            texto_vida = font.render(f"Boss HP: {self.vida} / {self.vida_max}", True, (255, 255, 255))
-            text_rect = texto_vida.get_rect(midtop=(pos_x + self.largo_barra // 2, pos_y + self.alto_barra + 10))
-            screen.blit(texto_vida, text_rect)
     def recibir_dano(self, cantidad):
         self.vida -= cantidad
         if self.vida < 0:
             self.vida = 0
     def atacar(self, jugador):
-        if not self.atacando and not self.atacando_corriendo and not self.tiempo_quieto:
+        if not self.atacando and not self.atacando_corriendo and not self.tiempo_quieto and not self.muriendo:
             distancia = abs(self.x - jugador.x)
             if distancia <= self.distancia_ataque:
                 self.atacando = True
@@ -186,4 +187,34 @@ class Boss1:
                 else:
                     self.imagen = boss1_ataque[self.frame_ataque]
                     self.imagen = pygame.transform.flip(self.imagen, self.direccion == 1, False)
-                    self.imagen = pygame.transform.scale(self.imagen, (80, 220))
+                    self.imagen = pygame.transform.scale(self.imagen, (50, 220))
+    def morir(self):
+        if self.vida <= 0 and not self.muriendo:
+            self.muriendo = True
+            self.frame_muerte = 0
+            self.contador_muerte = 0
+            self.velocidad = 0
+            self.y = 300
+            print("Boss1 muriendo")
+            self.atacando = False
+            self.atacando_corriendo = False
+            self.tiempo_quieto = 0
+            self.frame_ataque = 0
+            self.frame_ataque_corriendo = 0
+            self.frame_caminar = 0
+
+        if self.muriendo:
+            self.contador_muerte += 1
+            if self.contador_muerte >= self.frames_por_muerte:
+                self.contador_muerte = 0
+                self.frame_muerte += 1
+                if self.frame_muerte >= len(boss1_muerte):
+                    self.frame_muerte = len(boss1_muerte) - 1
+                else:
+                    self.imagen = boss1_muerte[self.frame_muerte]
+                    self.imagen = pygame.transform.flip(self.imagen, self.direccion == -1, False)
+                    self.imagen = pygame.transform.scale(self.imagen, (80, 160))
+                    
+
+    def esta_muerto(self):
+        return self.muriendo and self.frame_muerte == len(boss1_muerte) - 1

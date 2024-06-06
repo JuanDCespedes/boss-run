@@ -100,13 +100,17 @@ def main():
     clock = pygame.time.Clock()
     boss1 = None
     primera_entrada_jefe1 = True
+    boss1_muerto = False
+    boss1_monedas_dadas = False
+    boss3_muerto = False
+    boss3_monedas_dadas = False
     
     tiempo_para_nueva_gota = pygame.USEREVENT + 1
     pygame.time.set_timer(tiempo_para_nueva_gota, 1500)
     
     # Bucle principal de refrescación del juego
     while True:
-        #Sigue con vida?
+        # Sigue con vida?
         if pj.vida == 0:
             pj.game_over = True
         
@@ -142,20 +146,27 @@ def main():
         clock.tick(10)  # Mantener 10 FPS
         
         # Llamado de las funciones necesarias
-        #Funciones de movimiento de pj
+        # Funciones de movimiento de pj
         pj.mover()
         pj.pegar()
         pj.saltar()
         pj.morir()
         pj_rect.topleft = (pj.x, pj.y)
         
-        #Funciones de refrezcar pantalla
+        # Funciones de refrescar pantalla
         fondo.animar_fondo()
-        fondo.cambiar_fondo()
+        fondo.cambiar_fondo(boss1_muerto)
         fondo.pantalla_muerte()
+        if boss1_muerto and fondo.num_fondo == 2:
+            fondo.num_fondo = 0
+            boss1 = None
+            pj.x = 450
+            pj.y = 450
+            pj.altura_salto = 60
+            print("Jugador vuelve al lobby")
         
-        #Funciones del jefe 1
-        if fondo.num_fondo == 2 and not fondo.transicion and not pj.game_over:  # Asumiendo que 2 es el índice para "jefe_1.png"
+        # Funciones del jefe 1
+        if fondo.num_fondo == 2 and not fondo.transicion and not pj.game_over:
             if boss1 is None:
                 boss1 = Boss1()
                 print("Boss1 creado")
@@ -166,46 +177,57 @@ def main():
                 print("Primera entrada, iniciando cinemática")
             boss1.actualizar_cinematica()
             if boss1.cinematica_activa:
-                screen.blit(fondo.imagen_fondo, fondo_rect)  # Dibuja el fondo primero
-                boss1.draw(screen, fondo.imagen_fondo)  # Pasa el fondo al método draw del Boss1
+                screen.blit(fondo.imagen_fondo, fondo_rect)
+                boss1.draw(screen, fondo.imagen_fondo)
                 pygame.display.update()
                 continue
             else:
-                # Código normal cuando no hay cinemática
                 screen.blit(fondo.imagen_fondo, fondo_rect)
                 screen.blit(pj.jugador, pj_rect)
                 boss1.draw(screen, fondo.imagen_fondo)
-                if not boss1.atacando_corriendo:  # Verifica si el Boss1 no está atacando corriendo
+                if not boss1.atacando_corriendo:
                     boss1.caminar(pj.x)
                 boss1.atacar(pj)
                 boss1.atacar_corriendo(pj)
+                pj.aplicar_daño(boss1)
                 boss1.dibujar_vida(screen)
+                if boss1.vida <= 0:
+                    boss1.morir()
+
+                if boss1.esta_muerto() and not boss1_muerto:
+                    boss1_muerto = True
+                    
+                if boss1_muerto and not boss1_monedas_dadas:
+                    pj.vida = pj.vida_max
+                    pj.monedas += 1
+                    boss1_monedas_dadas = True
+                    print("Jugador recupera vida y gana 1 moneda")
+                    
         else:
-            boss1 = None  # Asegúrate de que el jefe no existe fuera de su habitación
+            boss1 = None
             primera_entrada_jefe1 = True
-         # Funciones del jefe 2
-        if fondo.num_fondo == 3 and not fondo.transicion and not pj.game_over:  # Asumiendo que 3 es el índice para "jefe_2.png"
-            if boss2 is None:
-                # Crear una instancia del boss 2 con las coordenadas iniciales
+
+        #Inicializar boss2 como None
+        boss2 = None
+
+
+        #Funciones del jefe 2 
+        if fondo.num_fondo == 3 and not pj.game_over:
+
+            if boss2 is None: 
                 boss2 = Boss(400, 300)
+                print("Boss2 creado")
 
-            # Dibujar al boss 2
-            boss2.dibujar(screen)
-
-            # Aquí puedes agregar la lógica adicional del boss 2, como mover(), atacar(), etc.
-            boss2.mover()
-            boss2.atacar(pj)
-
-        else:
-            # Si no estamos en la habitación del boss 2, asignar None al boss2
+            if boss2 is not None:
+                boss2.dibujar(screen)
+                boss2.mover()
+                boss2.atacar(pj)
+        
+        else: 
+            # si no estamos en la habitación del Boss2, asignar None al boss2 
             boss2 = None
 
-        # Impresión del jefe 2 (si existe)
-        if boss2 is not None:
-            boss2.dibujar(screen)
-                
-        
-        #Funciones de los portales
+        # Funciones de los portales
         portal1.animar_portal()
         portal1_rect.topleft = (47, 314)
         portal2.animar_portal()
@@ -213,41 +235,36 @@ def main():
         portal3.animar_portal()
         portal3_rect.topleft = (725, 314)
         
-        
         # Impresión de objetos en la pantalla
-        #Impresion del fondo
         screen.blit(fondo.imagen_fondo, fondo_rect)
 
-        #Impresion de pantalla de muerte
+        # Impresión de pantalla de muerte
         fade_surface = pygame.Surface((1022, 588))
         fade_surface.fill(BLACK)
         fade_surface.set_alpha(fondo.opacidad)
         screen.blit(fade_surface, (0, 0))
         
-        #Impresion de mensaje de GAME OVER
         if fondo.opacidad == 255:
             font1 = pygame.font.SysFont("Arial", 74)
             gameover_text = font1.render(f"GAME OVER", True, (135, 0, 0))
             screen.blit(gameover_text, (325, 230))
         
-        #Impresion de escenario del jefe 1
         if boss1 is not None and not boss1.cinematica_activa:
-            boss1.draw(screen, fondo.imagen_fondo)  # Pasa el fondo al método draw del Boss1
+            boss1.draw(screen, fondo.imagen_fondo)
         if not (fondo.transicion and fondo.portal_usado):
             if fondo.num_fondo == 1 and not pj.game_over:
                 screen.blit(portal1.imagen_portal, portal1_rect)
                 screen.blit(portal2.imagen_portal, portal2_rect)
                 screen.blit(portal3.imagen_portal, portal3_rect)
             screen.blit(pj.jugador, pj_rect)
-            
-        #Impresion del escenario del jefe 3
+        
         if fondo.num_fondo == 4 and not fondo.transicion and not pj.game_over:
-            if jefe3.vida != 0: 
+            if jefe3.vida != 0:
                 for lluvia in lluvias:
                     lluvia.gota_de_fuego()
                     lluvia_rect = lluvia.gota.get_rect(topleft=(lluvia.x, lluvia.y))
                     screen.blit(lluvia.gota, lluvia_rect)
-                    if lluvia.y > height:  # Si la gota de fuego sale de la pantalla, resetéala
+                    if lluvia.y > height:
                         lluvias.remove(lluvia)
                     if pj_rect.colliderect(lluvia_rect):
                         pj.recibir_dano(1)
@@ -284,6 +301,7 @@ def main():
                 jefe3.dibujar_vida(screen)
                 jefe3.rect = jefe3.jefe3.get_rect(topleft=(jefe3.xj3, jefe3.yj3))
                 pj.aplicar_daño(jefe3)
+            
             elif jefe3.vida == 0:
                 if jefe3.contador_mj3 == 3:
                     jefe3.yj3 = 525
@@ -295,10 +313,9 @@ def main():
         coords_text = font.render(f"Coordenadas: ({pj.x}, {pj.y})", True, (255, 255, 255))
         screen.blit(coords_text, (250, 10))
 
-        #pj.recibir_dano(1)
         pj.dibujar_vida(screen)
         
-        #Logica de ESC
+        # Lógica de ESC
         teclas = pygame.key.get_pressed()
         if teclas[K_ESCAPE]:
             if pj.game_over:
@@ -308,11 +325,11 @@ def main():
                 fondo.opacidad = 0
                 pj.muerto = False
                 pj.contador_muerte = 0
+                pj.altura_salto = 60
             if fondo.num_fondo == 4 and jefe3.vida == 0:
-                pj.vida = 20
+                pj.vida = pj.vida_max
                 fondo.num_fondo = 0
         
-        # Lógica de refresco de pantalla
         pygame.display.update()
         pygame.time.delay(100)
         
