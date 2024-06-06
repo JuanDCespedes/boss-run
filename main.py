@@ -73,6 +73,7 @@ def main():
     pygame.init()
     
     boss2 = None
+    fuegos = []
 
     # Generación de instancias
     pj = Jugador()
@@ -100,9 +101,12 @@ def main():
     clock = pygame.time.Clock()
     boss1 = None
     primera_entrada_jefe1 = True
-    primera_entrada_jefe2 = True 
     boss1_muerto = False
     boss1_monedas_dadas = False
+    boss2 = None
+    primera_entrada_jefe2 = True
+    boss2_muerto = False
+    boss2_monedas_dadas = False
     boss3_muerto = False
     boss3_monedas_dadas = False
     
@@ -211,28 +215,37 @@ def main():
             primera_entrada_jefe1 = True
 
         #Inicializar boss2 como None
-        boss2 = None
 
         print(f"Fondo actual: {fondo.num_fondo}, Transición: {fondo.transicion}, Transición completa: {fondo.transicion_completa}")
         #Funciones del jefe 2 
-        if fondo.num_fondo == 3 and not pj.game_over:
-            print("Entrando a la habitación del jefe 2")
-            if not fondo.transicion:
-                print("La transición ha terminado")
-                if boss2 is None:
-                    print("Creando instancia del Boss2") 
-                    boss2 = Boss(400, 300)
-                    print("Boss2 creado")
-            else: 
-                print("La transición está en curso")
-            if boss2 is not None:
-                print(f"Posición del Boss2: ({boss2.x}, {boss2.y})")
-                boss2.dibujar(screen)
-                boss2.mover()
-                boss2.atacar(pj)
-        
-            
+        if fondo.num_fondo == 3 and not fondo.transicion and not pj.game_over:
+            if boss2 is None:
+                print("Creando instancia del Boss2") 
+                boss2 = Boss(400, 300)
+                print("Boss2 creado")
+            if primera_entrada_jefe2:
+                primera_entrada_jefe2 = False
+                print("Primera entrada al jefe 2")
 
+            screen.blit(fondo.imagen_fondo, fondo_rect)
+            screen.blit(pj.jugador, pj_rect)
+            boss2.dibujar(screen)
+            boss2.mover()
+            boss2.atacar(pj)
+            pj.aplicar_daño(boss2)
+            if boss2.esta_muerto() and not boss2_muerto:
+                boss2_muerto = True
+
+            if boss2_muerto and not boss2_monedas_dadas:
+                pj.vida = pj.vida_max
+                pj.monedas += 1
+                boss2_monedas_dadas = True
+                print("Jugador recupera vida y gana 1 moneda")
+        else:
+            boss2 = None
+            primera_entrada_jefe2 = True
+            
+            
         # Funciones de los portales
         portal1.animar_portal()
         portal1_rect.topleft = (47, 314)

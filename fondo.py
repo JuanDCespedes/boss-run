@@ -144,3 +144,4 @@ class Portal():
             self.contador_p += 1
         self.imagen_portal = portal[self.contador_p]
         self.imagen_portal = pygame.transform.scale(self.imagen_portal, (250, 250))
+        

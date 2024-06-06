@@ -215,16 +215,26 @@ boss2_caminar = [
 boss2_atacar = [ 
     pygame.image.load("imagenes/boss2/caminar/atacar/ataque1.png"),
     pygame.image.load("imagenes/boss2/caminar/atacar/ataque2.png"),
-    pygame.image.load("imagenes/boss2/caminar/atacar/atrack3.png"),
-    pygame.image.load("imagenes/boss2/caminar/atacar/atrack4.png"),
-    pygame.image.load("imagenes/boss2/caminar/atacar/atrack5.png")
-]
+    pygame.image.load("imagenes/boss2/caminar/atacar/ataque3.png"),
+    pygame.image.load("imagenes/boss2/caminar/atacar/ataque4.png"),
+    pygame.image.load("imagenes/boss2/caminar/atacar/ataque5.png")
+    ]
 boss2_morir = [    
     pygame.image.load("imagenes/boss2/caminar/morir/dead.png"),
     pygame.image.load("imagenes/boss2/caminar/morir/dead1.png"),
     pygame.image.load("imagenes/boss2/caminar/morir/dead2.png"),
     pygame.image.load("imagenes/boss2/caminar/morir/dead3.png"),
     pygame.image.load("imagenes/boss2/caminar/morir/dead4.png")
+    ]
+boss2_saltar = [ 
+    pygame.image.load("imagenes/boss2/caminar/saltar/jump.png"),
+    pygame.image.load("imagenes/boss2/caminar/saltar/jump1.png"),
+    pygame.image.load("imagenes/boss2/caminar/saltar/jump2.png"),
+    pygame.image.load("imagenes/boss2/caminar/saltar/jump3.png"),
+    pygame.image.load("imagenes/boss2/caminar/saltar/jump4.png"),
+    pygame.image.load("imagenes/boss2/caminar/saltar/jump5.png"),
+    pygame.image.load("imagenes/boss2/caminar/saltar/jump6.png"),
+    pygame.image.load("imagenes/boss2/caminar/saltar/jump7.png")
     ]
 boss1_ataque_corriendo = [
     pygame.image.load("imagenes/boss1/ataque_corriendo/0.png"),
