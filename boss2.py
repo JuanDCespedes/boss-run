@@ -1,9 +1,14 @@
 import pygame
+from pygame.locals import*
 import random
 from imagenes1 import *
 
 class Boss:
     def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.imagen = pygame.transform.scale(boss2_caminar[0], (200, 200))  # Usar solo la primera imagen de la lista
+        self.rect = self.imagen.get_rect(topleft=(self.x, self.y))
         self.vida = 100
         self.vida_max = 100
         self.imagenes_caminar = boss2_caminar
@@ -13,8 +18,6 @@ class Boss:
         self.frame_actual = 0
         self.boss = self.imagenes_caminar[self.frame_actual]
         self.boss = pygame.transform.scale(self.boss, (200, 200))
-        self.x = x
-        self.y = y
         self.direccion = 1  # 1 para derecha, -1 para izquierda
         self.velocidad = 5
         self.saltando = False
@@ -24,7 +27,6 @@ class Boss:
         self.atacando = False
         self.frame_ataque = 0
         self.fuego = None
-        self.rect = self.boss.get_rect(topleft=(self.x, self.y))
         self.cooldown_ataque = 60  # 60 frames a 10 FPS = 6 segundos
         self.ultimo_ataque = 0
 
@@ -90,7 +92,10 @@ class Boss:
         return self.vida <= 0
 
     def dibujar(self, pantalla):
-        pantalla.blit(self.boss, self.rect)
+        print(f"Dibujando Boss2 en ({self.x}, {self.y})")
+        pantalla.blit(self.imagen, self.rect)
+
+        
 
 class Fuego:
     def __init__(self, x, y, direccion):
@@ -98,7 +103,7 @@ class Fuego:
         self.y = y + 100
         self.direccion = direccion
         self.velocidad = 10
-        self.imagen = pygame.image.load("imagenes/boss2/fuego.png")
+        self.imagen = pygame.image.load("imagenes/boss2/caminar/fuego.png")
         self.rect = self.imagen.get_rect(topleft=(self.x, self.y))
 
     def mover(self):

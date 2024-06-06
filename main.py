@@ -71,7 +71,10 @@ def mostrar_dialogo_tienda(screen, pj):
 # Función principal del juego
 def main():
     pygame.init()
-    
+    pygame.mixer.init()
+    pygame.mixer.music.load("sonido/musica/0.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)   
     boss2 = None
     fuegos = []
 
@@ -104,9 +107,6 @@ def main():
     boss1_muerto = False
     boss1_monedas_dadas = False
     boss2 = None
-    primera_entrada_jefe2 = True
-    boss2_muerto = False
-    boss2_monedas_dadas = False
     boss3_muerto = False
     boss3_monedas_dadas = False
     
@@ -174,15 +174,17 @@ def main():
         
         # Funciones del jefe 1
         if fondo.num_fondo == 2 and not fondo.transicion and not pj.game_over:
+            
             if boss1 is None:
                 boss1 = Boss1()
                 print("Boss1 creado")
-
+            
             if primera_entrada_jefe1:
                 boss1.iniciar_cinematica()
                 primera_entrada_jefe1 = False
                 print("Primera entrada, iniciando cinemática")
             boss1.actualizar_cinematica()
+            boss1.dibujar_vida(screen)
             if boss1.cinematica_activa:
                 screen.blit(fondo.imagen_fondo, fondo_rect)
                 boss1.draw(screen, fondo.imagen_fondo)
@@ -192,12 +194,13 @@ def main():
                 screen.blit(fondo.imagen_fondo, fondo_rect)
                 screen.blit(pj.jugador, pj_rect)
                 boss1.draw(screen, fondo.imagen_fondo)
+                
                 if not boss1.atacando_corriendo:
                     boss1.caminar(pj.x)
                 boss1.atacar(pj)
                 boss1.atacar_corriendo(pj)
                 pj.aplicar_daño(boss1)
-                boss1.dibujar_vida(screen)
+                
                 if boss1.vida <= 0:
                     boss1.morir()
 
@@ -216,35 +219,30 @@ def main():
 
         #Inicializar boss2 como None
 
-        print(f"Fondo actual: {fondo.num_fondo}, Transición: {fondo.transicion}, Transición completa: {fondo.transicion_completa}")
         #Funciones del jefe 2 
-        if fondo.num_fondo == 3 and not fondo.transicion and not pj.game_over:
-            if boss2 is None:
-                print("Creando instancia del Boss2") 
-                boss2 = Boss(400, 300)
-                print("Boss2 creado")
-            if primera_entrada_jefe2:
-                primera_entrada_jefe2 = False
-                print("Primera entrada al jefe 2")
-
-            screen.blit(fondo.imagen_fondo, fondo_rect)
-            screen.blit(pj.jugador, pj_rect)
-            boss2.dibujar(screen)
-            boss2.mover()
-            boss2.atacar(pj)
-            pj.aplicar_daño(boss2)
-            if boss2.esta_muerto() and not boss2_muerto:
-                boss2_muerto = True
-
-            if boss2_muerto and not boss2_monedas_dadas:
-                pj.vida = pj.vida_max
-                pj.monedas += 1
-                boss2_monedas_dadas = True
-                print("Jugador recupera vida y gana 1 moneda")
+        if fondo.num_fondo == 3 and not pj.game_over:
+            if not fondo.transicion and fondo.transicion_completa:
+                if boss2 is None:
+                    boss2 = Boss(400,300)
+                    print("Boss2 creado")
+        
+        
+                print("Dibujando Boss2")  # Agregar este mensaje de depuración
+                screen.blit(fondo.imagen_fondo, fondo_rect)
+                screen.blit(pj.jugador, pj_rect)
+                boss2.dibujar(screen)
+        
+            else:
+                print("Transición en curso en la habitación del jefe 2")  # Agregar este mensaje de depuración
+                print(f"Transición: {fondo.transicion}, Transición completa: {fondo.transicion_completa}") 
+                if not fondo.transicion:
+                    fondo.transicion_completa = True
+                    print("Transición completa en la habitación del jefe 2")
         else:
             boss2 = None
-            primera_entrada_jefe2 = True
+
             
+         
             
         # Funciones de los portales
         portal1.animar_portal()
@@ -256,6 +254,9 @@ def main():
         
         # Impresión de objetos en la pantalla
         screen.blit(fondo.imagen_fondo, fondo_rect)
+        if fondo.num_fondo == 3 and boss2 is not None:
+            boss2.dibujar(screen)
+        
 
         # Impresión de pantalla de muerte
         fade_surface = pygame.Surface((1022, 588))
@@ -281,6 +282,7 @@ def main():
         
         if fondo.num_fondo == 4 and not fondo.transicion and not pj.game_over:
             if jefe3.vida != 0:
+                
                 for lluvia in lluvias:
                     lluvia.gota_de_fuego()
                     lluvia_rect = lluvia.gota.get_rect(topleft=(lluvia.x, lluvia.y))

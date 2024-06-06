@@ -25,6 +25,7 @@ class Boss1:
         self.direccion = -1  # -1 para moverse a la izquierda (hacia el jugador)
         self.velocidad = 5  # Velocidad de movimiento
         self.mostrar_barra_vida = False  # Nueva variable para controlar la visibilidad
+        print("Boss1 creado. Mostrar barra de vida:", self.mostrar_barra_vida)
         self.largo_barra = 600  # Ancho de la barra de vida
         self.alto_barra = 30  # Alto de la barra de vida
         self.borde_barra = 4 
@@ -62,7 +63,9 @@ class Boss1:
                     print("Cinemática terminada")
                     self.caminando = True
                     self.mostrar_barra_vida = True
-                    print("Mostrando barra de vida del Boss1")
+                    print("Mostrando barra de vida del Boss1. Mostrar barra de vida:", self.mostrar_barra_vida)
+        else:
+            print("Cinemática no activa o ya mostrada")
     def atacar_corriendo(self, jugador):
         if not self.atacando_corriendo and not self.atacando and not self.tiempo_quieto and not self.muriendo:
             if pygame.time.get_ticks() - self.ultimo_ataque_corriendo >= self.cooldown_ataque_corriendo:
@@ -142,23 +145,27 @@ class Boss1:
             screen.blit(self.imagen, self.rect)
     
     def dibujar_vida(self, screen):
+        print("Método dibujar_vida llamado. Mostrar barra de vida:", self.mostrar_barra_vida)
         if self.mostrar_barra_vida:
+            print("Dibujando barra de vida del Boss1")
             vida_actual = int((self.vida / self.vida_max) * self.largo_barra)
         
-        # Calcula las posiciones para centrar la barra en la parte superior
-            pos_x = (1022 - self.largo_barra) // 2
-            pos_y = 10  # 10 píxeles desde la parte superior
         
         # Dibuja el fondo de la barra (rojo)
-            pygame.draw.rect(screen, (255, 0, 0), (pos_x, pos_y, self.largo_barra, self.alto_barra))
+            pygame.draw.rect(screen, (255, 0, 0), (800, 10, self.largo_barra, self.alto_barra))
         
         # Dibuja la vida actual (verde)
-            pygame.draw.rect(screen, (0, 255, 0), (pos_x, pos_y, vida_actual, self.alto_barra))
+            pygame.draw.rect(screen, (0, 255, 0), (800, 10, vida_actual, self.alto_barra))
         
         # Dibuja el borde de la barra (blanco)
-            pygame.draw.rect(screen, (255, 255, 255), (pos_x, pos_y, self.largo_barra, self.alto_barra), self.borde_barra)
-        
+            pygame.draw.rect(screen, (255, 255, 255), (800, 10, self.largo_barra, self.alto_barra), self.borde_barra)
+        else:
+            print("Barra de vida del Boss1 no visible")
     def recibir_dano(self, cantidad):
+        pygame.mixer.init()
+        pygame.mixer.music.load("sonido/efecto/0.mp3")
+        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.play()
         self.vida -= cantidad
         if self.vida < 0:
             self.vida = 0
@@ -190,6 +197,7 @@ class Boss1:
                     self.imagen = pygame.transform.scale(self.imagen, (50, 160))
     def morir(self):
         if self.vida <= 0 and not self.muriendo:
+            pygame.mixer.music.stop()
             self.muriendo = True
             self.frame_muerte = 0
             self.contador_muerte = 0
@@ -214,7 +222,11 @@ class Boss1:
                     self.imagen = boss1_muerte[self.frame_muerte]
                     self.imagen = pygame.transform.flip(self.imagen, self.direccion == -1, False)
                     self.imagen = pygame.transform.scale(self.imagen, (80, 160))
-                    
+            pygame.mixer.init()
+            pygame.mixer.music.load("sonido/musica/0.mp3")
+            pygame.mixer.music.set_volume(0.5)
+            pygame.mixer.music.play(-1)  
 
     def esta_muerto(self):
+        
         return self.muriendo and self.frame_muerte == len(boss1_muerte) - 1

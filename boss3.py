@@ -95,6 +95,7 @@ class Jefe3():
     #Funcion encargada de la muerte del jefe
     def morir(self):
         if self.vida <= 0 and not self.muriendo:
+            pygame.mixer.music.stop()
             self.muriendo = True
             self.contador_mj3 = 0
             print("Jefe3 muriendo")
@@ -105,6 +106,10 @@ class Jefe3():
                 if self.contador_mj3 == 3:
                     self.yj3 = 525
                 self.jefe3 = jefe3_morir[self.contador_mj3]
+            pygame.mixer.init()
+            pygame.mixer.music.load("sonido/musica/0.mp3")
+            pygame.mixer.music.set_volume(0.5)
+            pygame.mixer.music.play(-1)
     def esta_muerto(self):
         return self.muriendo and self.contador_mj3 == len(jefe3_morir) - 1
             

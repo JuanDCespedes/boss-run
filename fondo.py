@@ -22,6 +22,7 @@ class Fondo():
     #Función dedicada a refrezcar el fondo
     def animar_fondo(self):
         if self.num_fondo == 0:
+            
             if self.contador_f == 31:
                 self.contador_f = 0
             else:
@@ -63,11 +64,14 @@ class Fondo():
             if self.transicion:
                 self.imagen_fondo = pantalla_carga
                 self.tiempo_transicion += 1
+                print(f"Tiempo de transición: {self.tiempo_transicion}")
                 if self.tiempo_transicion > 10:
                     self.transicion = False
                     self.tiempo_transicion = 0
+                    self.transicion_completa=False
                     self.imagen_fondo = pygame.image.load("imagenes/jefe_2.png")
-                    self.transicion_completa=True
+                    print("Transición completa en la habitación del jefe 2")  # Agregar este 
+                    
             else:
                 self.imagen_fondo = pygame.image.load("imagenes/jefe_2.png")
         elif self.num_fondo == 4:
@@ -89,12 +93,22 @@ class Fondo():
         
         if teclas[K_UP]:
             if 402 <= self.jugador.x <= 510 and self.num_fondo == 0:
+                pygame.mixer.music.stop()
+                pygame.mixer.init()
+                pygame.mixer.music.load("sonido/musica/1.mp3")
+                pygame.mixer.music.set_volume(0.5)
+                pygame.mixer.music.play(-1)
                 self.num_fondo = 1
                 self.imagen_fondo = pygame.image.load("imagenes/habitacion.png")
             elif self.num_fondo == 1:
                 print(f"posicion del jugador: ({self.jugador.x}, {self.jugador.y})")
                 print(f"Fondo actual: {self.num_fondo}")
                 if 0 <= self.jugador.x <= 210 and not boss1_muerto:  # Verifica si el Boss1 no ha sido derrotado
+                    pygame.mixer.music.stop()
+                    pygame.mixer.init()
+                    pygame.mixer.music.load("sonido/musica/2.mp3")
+                    pygame.mixer.music.set_volume(0.5)
+                    pygame.mixer.music.play(-1)
                     print("Entrando al portal izquierdo")
                     self.transicion = True
                     self.tiempo_transicion = 0
@@ -110,6 +124,11 @@ class Fondo():
                     self.fondo_destino = pygame.image.load("imagenes/jefe_2.png")
                     self.portal_usado = "centro"
                 elif 690 <= self.jugador.x <= 870 and not boss3_muerto:
+                    pygame.mixer.music.stop()
+                    pygame.mixer.init()
+                    pygame.mixer.music.load("sonido/musica/4.mp3")
+                    pygame.mixer.music.set_volume(0.5)
+                    pygame.mixer.music.play(-1)
                     print ("Entrando al portal derecho")
                     self.transicion = True
                     self.tiempo_transicion = 0
