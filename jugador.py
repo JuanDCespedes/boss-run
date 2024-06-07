@@ -149,7 +149,6 @@ class Jugador():
     def aplicar_daño(self, objetivo):
         if self.atacando and self.rect_ataque and self.rect_ataque.colliderect(objetivo.rect):
             objetivo.recibir_dano(self.daño)
-            print(f"¡Golpe! El jugador hizo {self.daño} de daño.")
             return True
         return False
     

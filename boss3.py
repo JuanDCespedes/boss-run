@@ -98,8 +98,6 @@ class Jefe3():
             pygame.mixer.music.stop()
             self.muriendo = True
             self.contador_mj3 = 0
-            print("Jefe3 muriendo")
-
         if self.muriendo:
             if self.contador_mj3 < len(jefe3_morir) - 1:
                 self.contador_mj3 += 1

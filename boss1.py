@@ -6,8 +6,8 @@ import random
 
 class Boss1:
     def __init__(self):
-        self.vida = 1  # Vida inicial del jefe
-        self.vida_max = 1
+        self.vida = 40  # Vida inicial del jefe
+        self.vida_max = 40
         self.x = 780  # Posición x inicial
         self.y = 400  # Posición y inicial ajustada
         self.imagen = boss1_imagen
@@ -25,7 +25,6 @@ class Boss1:
         self.direccion = -1  # -1 para moverse a la izquierda (hacia el jugador)
         self.velocidad = 5  # Velocidad de movimiento
         self.mostrar_barra_vida = False  # Nueva variable para controlar la visibilidad
-        print("Boss1 creado. Mostrar barra de vida:", self.mostrar_barra_vida)
         self.largo_barra = 600  # Ancho de la barra de vida
         self.alto_barra = 30  # Alto de la barra de vida
         self.borde_barra = 4 
@@ -43,7 +42,7 @@ class Boss1:
         self.velocidad_ataque_corriendo = 30
         self.tiempo_quieto = 0
         self.tiempo_quieto_total = 25 
-        self.cooldown_ataque_corriendo = random.randint(30, 70)  # Cooldown inicial aleatorio de 3 a 7 segundos (en milisegundos)
+        self.cooldown_ataque_corriendo = random.randint(40, 80)  # Cooldown inicial aleatorio de 3 a 7 segundos (en milisegundos)
         self.ultimo_ataque_corriendo = pygame.time.get_ticks()
         self.muriendo = False
         self.frame_muerte = 0.5
@@ -55,17 +54,12 @@ class Boss1:
             if self.contador_frames >= self.frames_por_imagen:
                 self.contador_frames = 0
                 self.frame_actual += 1
-                print(f"Mostrando frame {self.frame_actual} de la cinemática")  # Para depuración
                 if self.frame_actual >= len(boss1_cinematica):
                     self.cinematica_activa = False
                     self.frame_actual = 0
                     self.cinematica_mostrada = True
-                    print("Cinemática terminada")
                     self.caminando = True
                     self.mostrar_barra_vida = True
-                    print("Mostrando barra de vida del Boss1. Mostrar barra de vida:", self.mostrar_barra_vida)
-        else:
-            print("Cinemática no activa o ya mostrada")
     def atacar_corriendo(self, jugador):
         if not self.atacando_corriendo and not self.atacando and not self.tiempo_quieto and not self.muriendo:
             if pygame.time.get_ticks() - self.ultimo_ataque_corriendo >= self.cooldown_ataque_corriendo:
@@ -76,7 +70,6 @@ class Boss1:
                 self.velocidad = self.velocidad_ataque_corriendo
                 self.direccion = random.choice([-1, 1])  # Elige una dirección aleatoria
                 self.ultimo_ataque_corriendo = pygame.time.get_ticks()
-                print("Boss1 atacando corriendo")
     
         if self.atacando_corriendo:
             self.contador_ataque_corriendo += 1
@@ -103,20 +96,17 @@ class Boss1:
                 self.atacando_corriendo = False
                 self.velocidad = 0
                 self.tiempo_quieto = self.tiempo_quieto_total
-                self.cooldown_ataque_corriendo = random.randint(3000, 7000)  # Cooldown aleatorio de 3 a 7 segundos (en milisegundos)
-                print(f"Boss1 quieto después de llegar al borde de la pantalla. Próximo ataque corriendo en {self.cooldown_ataque_corriendo / 1000} segundos")
+                self.cooldown_ataque_corriendo = random.randint(4000, 8000)  # Cooldown aleatorio de 3 a 7 segundos (en milisegundos)
     
         if self.tiempo_quieto > 0:
             self.tiempo_quieto -= 1
             if self.tiempo_quieto == 0:
                 self.velocidad = self.velocidad_original
-                print("Boss1 vuelve a moverse normalmente")
     def iniciar_cinematica(self):
         if not self.cinematica_mostrada:
             self.cinematica_activa = True
             self.frame_actual = 0
             self.contador_frames = 0
-            print("Iniciando cinemática")
     def caminar(self, jugador_x):
         if self.caminando and not self.muriendo:
             self.contador_pasos += 1
@@ -145,9 +135,7 @@ class Boss1:
             screen.blit(self.imagen, self.rect)
     
     def dibujar_vida(self, screen):
-        print("Método dibujar_vida llamado. Mostrar barra de vida:", self.mostrar_barra_vida)
         if self.mostrar_barra_vida:
-            print("Dibujando barra de vida del Boss1")
             vida_actual = int((self.vida / self.vida_max) * self.largo_barra)
         
         
@@ -159,8 +147,6 @@ class Boss1:
         
         # Dibuja el borde de la barra (blanco)
             pygame.draw.rect(screen, (255, 255, 255), (800, 10, self.largo_barra, self.alto_barra), self.borde_barra)
-        else:
-            print("Barra de vida del Boss1 no visible")
     def recibir_dano(self, cantidad):
         pygame.mixer.init()
         pygame.mixer.music.load("sonido/efecto/0.mp3")
@@ -178,7 +164,6 @@ class Boss1:
                 self.contador_ataque = 0
                 self.velocidad_original = self.velocidad  # Guarda la velocidad original
                 self.velocidad = 0  # Establece la velocidad a 0 para que el Boss1 se quede quieto
-                print("Boss1 atacando")
     
         if self.atacando:
             self.contador_ataque += 1
@@ -190,7 +175,6 @@ class Boss1:
                     self.frame_ataque = 0
                     self.velocidad = self.velocidad_original  # Restablece la velocidad original
                     jugador.recibir_dano(self.damage)
-                    print(f"Jugador recibió {self.damage} de daño")
                 else:
                     self.imagen = boss1_ataque[self.frame_ataque]
                     self.imagen = pygame.transform.flip(self.imagen, self.direccion == 1, False)
@@ -202,8 +186,6 @@ class Boss1:
             self.frame_muerte = 0
             self.contador_muerte = 0
             self.velocidad = 0
-            self.y = 300
-            print("Boss1 muriendo")
             self.atacando = False
             self.atacando_corriendo = False
             self.tiempo_quieto = 0

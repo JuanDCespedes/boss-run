@@ -7,81 +7,22 @@ class Boss:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-        self.imagen = pygame.transform.scale(boss2_caminar[0], (200, 200))  # Usar solo la primera imagen de la lista
-        self.rect = self.imagen.get_rect(topleft=(self.x, self.y))
-        self.vida = 100
-        self.vida_max = 100
-        self.imagenes_caminar = boss2_caminar
-        self.imagenes_ataque = boss2_atacar
-        self.imagenes_saltar = boss2_saltar
-        self.imagenes_muerte = boss2_morir
-        self.frame_actual = 0
-        self.boss = self.imagenes_caminar[self.frame_actual]
-        self.boss = pygame.transform.scale(self.boss, (200, 200))
-        self.direccion = 1  # 1 para derecha, -1 para izquierda
-        self.velocidad = 5
-        self.saltando = False
-        self.velocidad_salto = 15
-        self.gravedad = 1
-        self.altura_salto = 0
-        self.atacando = False
-        self.frame_ataque = 0
-        self.fuego = None
+        self.boss = pygame.transform.scale(boss2_atacar[4], (200, 200))  # Usamos solo la primera imagen
+        self.boss = pygame.transform.flip(self.boss, True, False)
+        self.rect = self.boss.get_rect(topleft=(self.x, self.y))
+        self.direccion = -1  # -1 para izquierda
         self.cooldown_ataque = 60  # 60 frames a 10 FPS = 6 segundos
         self.ultimo_ataque = 0
+        self.vida = 100
+        self.vida_max = 100
+        self.muriendo = False
+        self.frame_muerte = 0
+        self.frames_muerte = len(boss2_morir)
 
-    def mover(self):
-        self.x += self.velocidad * self.direccion
-        if self.x <= 0 or self.x >= 800:
-            self.direccion *= -1
-        
-        if not self.saltando and random.randint(1, 100) == 1:  # 1% de probabilidad de saltar
-            self.saltar()
-
-        self.rect.x = self.x
-        self.rect.y = self.y
-
-    def saltar(self):
-        if not self.saltando:
-            self.saltando = True
-            self.altura_salto = -self.velocidad_salto
-
-    def actualizar(self, jugador):
-        self.mover()
-        
-        if self.saltando:
-            self.y += self.altura_salto
-            self.altura_salto += self.gravedad
-            if self.y >= 300:  # Asumiendo que 300 es el piso
-                self.y = 300
-                self.saltando = False
-                self.altura_salto = 0
-
-        self.rect.y = self.y
-        
-        self.atacar(jugador)
-        
-        if self.atacando:
-            self.frame_ataque += 1
-            if self.frame_ataque >= len(self.imagenes_ataque):
-                self.frame_ataque = 0
-                self.atacando = False
-                self.boss = self.imagenes_caminar[self.frame_actual]
-            else:
-                self.boss = self.imagenes_ataque[self.frame_ataque]
-        else:
-            self.frame_actual = (self.frame_actual + 1) % len(self.imagenes_caminar)
-            self.boss = self.imagenes_caminar[self.frame_actual]
-        
-        self.boss = pygame.transform.flip(self.boss, self.direccion == -1, False)
-
-    def atacar(self, jugador):
-        if not self.atacando and pygame.time.get_ticks() - self.ultimo_ataque > self.cooldown_ataque:
-            if (self.direccion == 1 and jugador.x < self.x) or (self.direccion == -1 and jugador.x > self.x):
-                self.atacando = True
-                self.frame_ataque = 0
-                self.fuego = Fuego(self.x, self.y, self.direccion)
-                self.ultimo_ataque = pygame.time.get_ticks()
+    def atacar(self):
+        if pygame.time.get_ticks() - self.ultimo_ataque > self.cooldown_ataque:
+            self.fuego = Fuego(self.x, self.y, self.direccion)
+            self.ultimo_ataque = pygame.time.get_ticks()
 
     def recibir_dano(self, cantidad):
         self.vida -= cantidad
@@ -92,15 +33,34 @@ class Boss:
         return self.vida <= 0
 
     def dibujar(self, pantalla):
-        print(f"Dibujando Boss2 en ({self.x}, {self.y})")
-        pantalla.blit(self.imagen, self.rect)
+        pantalla.blit(self.boss, self.rect)
 
-        
+    def dibujar_vida(self, screen): 
+        vida_actual = int((self.vida / self.vida_max) * 200)  # Asumiendo una barra de 200 píxeles
+        pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y - 20, 200, 10))
+        pygame.draw.rect(screen, (0, 255, 0), (self.x, self.y - 20, vida_actual, 10))
+    def morir(self):
+        if not self.muriendo:
+            self.muriendo = True
+            self.frame_muerte = 0
+
+        if self.frame_muerte < self.frames_muerte:
+            self.boss = pygame.transform.scale(boss2_morir[self.frame_muerte], (200, 200))
+            self.frame_muerte += 1
+            pygame.mixer.music.stop()
+            pygame.mixer.init()
+            pygame.mixer.music.load("sonido/musica/0.mp3")
+            pygame.mixer.music.set_volume(0.5)
+            pygame.mixer.music.play(-1) 
+        else:
+            return True
+
+        return False
 
 class Fuego:
     def __init__(self, x, y, direccion):
-        self.x = x + (50 if direccion == 1 else -50)
-        self.y = y + 100
+        self.x = x - 50  # Ajusta la posición inicial del fuego
+        self.y = y + 50
         self.direccion = direccion
         self.velocidad = 10
         self.imagen = pygame.image.load("imagenes/boss2/caminar/fuego.png")

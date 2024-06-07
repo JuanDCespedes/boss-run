@@ -5,6 +5,7 @@ from jugador import *
 from boss1 import *
 from boss2 import *
 from boss3 import *
+from pantalla_inicio import *
 
 # Tamaño constante de la ventana de juego
 size = width, height = 1022, 588
@@ -71,12 +72,9 @@ def mostrar_dialogo_tienda(screen, pj):
 # Función principal del juego
 def main():
     pygame.init()
-    pygame.mixer.init()
-    pygame.mixer.music.load("sonido/musica/0.mp3")
-    pygame.mixer.music.set_volume(0.5)
-    pygame.mixer.music.play(-1)   
+    pantalla_inicio = PantallaInicio(screen)
+    pantalla_inicio.mostrar_pantalla_inicio()
     boss2 = None
-    fuegos = []
 
     # Generación de instancias
     pj = Jugador()
@@ -106,9 +104,16 @@ def main():
     primera_entrada_jefe1 = True
     boss1_muerto = False
     boss1_monedas_dadas = False
+    boss2_muerto = False
+    boss2_monedas_dadas = False
     boss2 = None
     boss3_muerto = False
     boss3_monedas_dadas = False
+    mostrar_pantalla_victoria = False
+    pantalla_victoria = pygame.image.load("imagenes/pantalla_victoria.jpg")
+    pantalla_v=pygame.transform.scale(pantalla_victoria, (1022,588))
+
+
     
     tiempo_para_nueva_gota = pygame.USEREVENT + 1
     pygame.time.set_timer(tiempo_para_nueva_gota, 1500)
@@ -116,6 +121,11 @@ def main():
     # Bucle principal de refrescación del juego
     while True:
         # Sigue con vida?
+        if boss1_muerto and boss2_muerto and boss3_muerto:
+            mostrar_pantalla_victoria = True
+        if mostrar_pantalla_victoria:
+            screen.blit(pantalla_v, (0, 0))
+            pygame.display.flip()
         if pj.vida == 0:
             pj.game_over = True
         
@@ -124,10 +134,7 @@ def main():
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    print(f"Posición del jugador: ({pj.x}, {pj.y})")
-                    print(f"Fondo: {fondo.num_fondo}")
                     if isinstance(fondo, Fondo) and fondo.num_fondo == 0 and 690 <= pj.x <= 780 and pj.y == 450:
-                        print("¡Condición cumplida! Mostrando diálogo...")
                         mostrar_dialogo_tienda(screen, pj)
                         continue
             elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -170,19 +177,16 @@ def main():
             pj.x = 450
             pj.y = 450
             pj.altura_salto = 60
-            print("Jugador vuelve al lobby")
         
         # Funciones del jefe 1
         if fondo.num_fondo == 2 and not fondo.transicion and not pj.game_over:
             
             if boss1 is None:
                 boss1 = Boss1()
-                print("Boss1 creado")
             
             if primera_entrada_jefe1:
                 boss1.iniciar_cinematica()
                 primera_entrada_jefe1 = False
-                print("Primera entrada, iniciando cinemática")
             boss1.actualizar_cinematica()
             boss1.dibujar_vida(screen)
             if boss1.cinematica_activa:
@@ -211,7 +215,6 @@ def main():
                     pj.vida = pj.vida_max
                     pj.monedas += 1
                     boss1_monedas_dadas = True
-                    print("Jugador recupera vida y gana 1 moneda")
                     
         else:
             boss1 = None
@@ -223,21 +226,43 @@ def main():
         if fondo.num_fondo == 3 and not pj.game_over:
             if not fondo.transicion and fondo.transicion_completa:
                 if boss2 is None:
-                    boss2 = Boss(400,300)
-                    print("Boss2 creado")
+                    boss2 = Boss(780,430)
         
         
-                print("Dibujando Boss2")  # Agregar este mensaje de depuración
+                print("Actualizando y dibujando Boss2")  # Agregar este mensaje de depuración
                 screen.blit(fondo.imagen_fondo, fondo_rect)
                 screen.blit(pj.jugador, pj_rect)
+                pj.aplicar_daño(boss2)
+                boss2.atacar()
                 boss2.dibujar(screen)
-        
+                boss2.dibujar_vida(screen) # Dibujar la barra de vida del boss2
+                if boss2.fuego is not None:
+                    print("Fuego creado")
+                    boss2.fuego.mover()
+                    boss2.fuego.dibujar(screen)
+                    print("Fuego dibujado en la posición:", boss2.fuego.rect)
+                    if pj.rect.colliderect(boss2.fuego.rect):
+                        pj.recibir_dano(0.1)  # El jugador recibe daño si colisiona con el fuego
+                        boss2.fuego = None  # Eliminar el fuego después de la colisión
+                if pj.rect.colliderect(boss2.rect):
+                    pj.recibir_dano(0.1)  # El jugador recibe daño si colisiona con el Boss2
+                if boss2.esta_muerto():
+                    if boss2.morir():
+                        boss2 = None  # Eliminar el Boss2 si ha sido derrotado
+                        fondo.num_fondo = 0  # Cambiar al fondo del lobby
+                        pj.vida = pj.vida_max  # Restaurar la vida del jugador
+                        pj.x = 450  # Restablecer la posición del jugador
+                        pj.y = 450
+                        boss2_muerto = True
+                    
+                        if not boss2_monedas_dadas:
+                            pj.monedas += 1
+                            boss2_monedas_dadas = True
+                        print("Boss2 derrotado, volviendo al lobby")
+
             else:
-                print("Transición en curso en la habitación del jefe 2")  # Agregar este mensaje de depuración
-                print(f"Transición: {fondo.transicion}, Transición completa: {fondo.transicion_completa}") 
                 if not fondo.transicion:
                     fondo.transicion_completa = True
-                    print("Transición completa en la habitación del jefe 2")
         else:
             boss2 = None
 
@@ -275,7 +300,8 @@ def main():
             if fondo.num_fondo == 1 and not pj.game_over:
                 if not boss1_muerto:
                     screen.blit(portal1.imagen_portal, portal1_rect)
-                screen.blit(portal2.imagen_portal, portal2_rect)
+                if not boss2_muerto:
+                    screen.blit(portal2.imagen_portal, portal2_rect)
                 if not boss3_muerto:
                     screen.blit(portal3.imagen_portal, portal3_rect)
             screen.blit(pj.jugador, pj_rect)
@@ -338,13 +364,11 @@ def main():
                 pj.vida = pj.vida_max
                 pj.monedas += 1
                 boss3_monedas_dadas = True
-                print("Jugador recupera vida y gana 1 moneda")
         
                 fondo.num_fondo = 0
                 jefe3 = None
                 pj.x = 450
                 pj.y = 450
-                print("Jugador vuelve al lobby")
         
         # Coordenadas
         coords_text = font.render(f"Coordenadas: ({pj.x}, {pj.y})", True, (255, 255, 255))
