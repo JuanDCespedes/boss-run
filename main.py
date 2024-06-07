@@ -367,8 +367,8 @@ def main():
                 pj.y = 450
         
         # Coordenadas
-        coords_text = font.render(f"Coordenadas: ({pj.x}, {pj.y})", True, (255, 255, 255))
-        screen.blit(coords_text, (250, 10))
+        #coords_text = font.render(f"Coordenadas: ({pj.x}, {pj.y})", True, (255, 255, 255))
+        #screen.blit(coords_text, (250, 10))
 
         pj.dibujar_vida(screen)
         

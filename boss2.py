@@ -25,6 +25,10 @@ class Boss:
             self.ultimo_ataque = pygame.time.get_ticks()
 
     def recibir_dano(self, cantidad):
+        pygame.mixer.init()
+        pygame.mixer.music.load("sonido/efecto/0.mp3")
+        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.play()
         self.vida -= cantidad
         if self.vida < 0:
             self.vida = 0
