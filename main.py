@@ -229,7 +229,6 @@ def main():
                     boss2 = Boss(780,430)
         
         
-                print("Actualizando y dibujando Boss2")  # Agregar este mensaje de depuración
                 screen.blit(fondo.imagen_fondo, fondo_rect)
                 screen.blit(pj.jugador, pj_rect)
                 pj.aplicar_daño(boss2)
@@ -237,10 +236,8 @@ def main():
                 boss2.dibujar(screen)
                 boss2.dibujar_vida(screen) # Dibujar la barra de vida del boss2
                 if boss2.fuego is not None:
-                    print("Fuego creado")
                     boss2.fuego.mover()
                     boss2.fuego.dibujar(screen)
-                    print("Fuego dibujado en la posición:", boss2.fuego.rect)
                     if pj.rect.colliderect(boss2.fuego.rect):
                         pj.recibir_dano(0.1)  # El jugador recibe daño si colisiona con el fuego
                         boss2.fuego = None  # Eliminar el fuego después de la colisión
@@ -258,7 +255,6 @@ def main():
                         if not boss2_monedas_dadas:
                             pj.monedas += 1
                             boss2_monedas_dadas = True
-                        print("Boss2 derrotado, volviendo al lobby")
 
             else:
                 if not fondo.transicion:
